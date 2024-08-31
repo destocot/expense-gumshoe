@@ -1,6 +1,7 @@
 import Brand from '@/components/brand'
 import CreateExpenseForm from '@/components/create-expense-form'
 import ExpenseList from '@/components/expense-list'
+import { validateRequest } from '@/lib/auth'
 import dbConnect from '@/lib/dbConnect'
 import ExpenseModel from '@/models/Expense'
 
@@ -12,6 +13,9 @@ const findAllExpenses = async () => {
 
 const HomePage = async () => {
   const expenses = await findAllExpenses()
+  const { user } = await validateRequest()
+
+  console.log(user)
 
   return (
     <main>

@@ -1,27 +1,24 @@
 import { Document, model, models, Schema } from 'mongoose'
 
 export type Session = Document & {
-  _id: string
-  user_id: string
-  expires_at: Date
+  userId: Schema.Types.ObjectId
+  expiresAt: Date
 }
 
 const Session = new Schema(
   {
-    _id: {
-      type: String,
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
       required: true,
+      unique: true,
     },
-    user_id: {
-      type: String,
-      required: true,
-    },
-    expires_at: {
+    expiresAt: {
       type: Date,
       required: true,
     },
   } as const,
-  { _id: false, versionKey: false },
+  { versionKey: false },
 )
 
 const SessionModel = models.Session ?? model<Session>('Session', Session)

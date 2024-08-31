@@ -1,15 +1,23 @@
 import { Document, Schema, model, models } from 'mongoose'
 
-export type User = Document & { _id: string }
+export type User = Document & {
+  username: string
+  password: string
+}
 
-const UserSchema = new Schema(
+const UserSchema = new Schema<User>(
   {
-    _id: {
+    username: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    password: {
       type: String,
       required: true,
     },
   } as const,
-  { _id: false, versionKey: false },
+  { versionKey: false },
 )
 
 const UserModel = models.User ?? model<User>('User', UserSchema)

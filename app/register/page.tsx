@@ -1,6 +1,7 @@
 import Brand from '@/components/brand'
 import { Button, buttonVariants } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { createUser } from '@/lib/actions'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
 
@@ -10,10 +11,10 @@ export default function RegisterPage() {
       <div className='flex flex-col gap-y-4 py-16'>
         <Brand />
 
-        <form className='flex flex-col gap-y-2'>
-          <Input placeholder='Username' />
-          <Input placeholder='Password' />
-          <Input placeholder='Confirm Password' />
+        <form action={createUser} className='flex flex-col gap-y-2'>
+          <Input placeholder='Username' name='username' />
+          <Input placeholder='Password' name='password' />
+          <Input placeholder='Confirm Password' name='confirmPassword' />
           <Button className='w-full'>Register</Button>
         </form>
 
