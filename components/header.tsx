@@ -5,6 +5,7 @@ import { ModeToggle } from './mode-toggle'
 
 export const Header = async () => {
   const { user } = await validateRequest()
+  // tsret
 
   return (
     <header className='bg-primary'>
