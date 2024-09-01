@@ -23,7 +23,8 @@ const findAllExpenses = async (userId: string) => {
   await dbConnect()
   const expenses = await ExpenseModel.find({
     userId,
-  })
+  }).sort({ createdAt: -1 })
+
   return expenses
 }
 

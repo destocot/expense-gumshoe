@@ -4,7 +4,7 @@ export const CreateExpenseSchema = v.object({
   amount: v.union([
     v.pipe(
       v.string(),
-      v.transform(Number),
+      v.transform((i) => Number(i)),
       v.number(),
       v.minValue(0.01),
       v.transform((i) => i.toFixed(2)),

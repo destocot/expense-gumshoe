@@ -13,7 +13,7 @@ const ExpenseSchema = new Schema<Expense>(
     amount: { type: Number, required: true },
     type: { type: String, enum: TYPES, required: true },
   },
-  { versionKey: false },
+  { timestamps: true, versionKey: false },
 )
 
 const ExpenseModel = models.Expense ?? model<Expense>('Expense', ExpenseSchema)
