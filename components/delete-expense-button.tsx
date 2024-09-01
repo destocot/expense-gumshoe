@@ -5,22 +5,21 @@ import { deleteExpense } from '@/lib/actions'
 import { cn } from '@/lib/utils'
 import { Trash2Icon } from 'lucide-react'
 
-type DeleteExpenseButtonProps = { id: string; className?: string }
+type DeleteExpenseButtonProps = { expenseId: string; className?: string }
 
 export const DeleteExpenseButton = ({
-  id,
+  expenseId,
   className,
 }: DeleteExpenseButtonProps) => {
   return (
     <Button
-      size='icon'
-      className={cn('h-fit w-fit p-0.5', className)}
+      className={cn('h-full w-full p-0', className)}
       variant='destructive'
       onClick={async () => {
-        await deleteExpense({ id })
+        await deleteExpense({ id: expenseId })
       }}
     >
-      <Trash2Icon size={16} />
+      <Trash2Icon />
     </Button>
   )
 }

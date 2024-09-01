@@ -20,13 +20,13 @@ import { valibotResolver } from '@hookform/resolvers/valibot'
 import { DollarSignIcon, Plus } from 'lucide-react'
 import { RadioGroup, RadioGroupItem } from './ui/radio-group'
 import { TYPES } from '@/lib/constants'
-import { capitalize } from '@/lib/utils'
+import { capitalize, cn } from '@/lib/utils'
 
 const CreateExpenseForm = () => {
   const form = useForm<CreateExpenseInput>({
     resolver: valibotResolver(CreateExpenseSchema),
     reValidateMode: 'onSubmit',
-    defaultValues: { amount: '' },
+    defaultValues: { amount: '', description: '', type: undefined },
   })
 
   const submit = async (values: CreateExpenseInput) => {
@@ -34,12 +34,37 @@ const CreateExpenseForm = () => {
     form.reset({ type: values.type })
   }
 
+  const { watch } = form
+  const watchType = watch('type')
+
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(submit)}
-        className='flex flex-col gap-y-2.5'
+        className='flex flex-col gap-y-0.5'
       >
+        <div className='flex items-end gap-x-2'>
+          <FormField
+            control={form.control}
+            name='description'
+            render={({ field }) => (
+              <FormItem className='flex-1'>
+                <FormLabel className='sr-only'>Description</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder='Description'
+                    {...field}
+                    className='focus-visible:bg-primary/5 focus-visible:ring-0 focus-visible:ring-offset-0'
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <Button type='submit' size='icon'>
+            <Plus />
+          </Button>
+        </div>
+
         <div className='flex items-end gap-x-2'>
           <FormField
             control={form.control}
@@ -53,7 +78,13 @@ const CreateExpenseForm = () => {
                       type='number'
                       step={0.01}
                       placeholder='0.00'
-                      className='ps-6 [&::-webkit-inner-spin-button]:appearance-none'
+                      className={cn(
+                        'border-b-2 ps-6 focus-visible:bg-primary/5 focus-visible:ring-0 focus-visible:ring-offset-0 [&::-webkit-inner-spin-button]:appearance-none',
+                        {
+                          'border-b-destructive': watchType === 'expense',
+                          'border-b-success': watchType === 'income',
+                        },
+                      )}
                       {...field}
                       onChange={(evt) => {
                         const dec = evt.target.value.split('.')[1]
@@ -70,41 +101,37 @@ const CreateExpenseForm = () => {
               </FormItem>
             )}
           />
-          <Button type='submit' size='icon'>
-            <Plus />
-          </Button>
+          <FormField
+            control={form.control}
+            name='type'
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <RadioGroup
+                    onValueChange={field.onChange}
+                    value={field.value}
+                    className='flex flex-col'
+                  >
+                    {TYPES.map((type) => {
+                      return (
+                        <FormItem
+                          key={type}
+                          className='flex items-center space-x-3 space-y-0'
+                        >
+                          <FormControl>
+                            <RadioGroupItem value={type} />
+                          </FormControl>
+                          <FormLabel>{capitalize(type)}</FormLabel>
+                        </FormItem>
+                      )
+                    })}
+                  </RadioGroup>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </div>
-
-        <FormField
-          control={form.control}
-          name='type'
-          render={({ field }) => (
-            <FormItem className='space-y-3'>
-              <FormControl>
-                <RadioGroup
-                  onValueChange={field.onChange}
-                  value={field.value}
-                  className='flex items-center space-x-1'
-                >
-                  {TYPES.map((type) => {
-                    return (
-                      <FormItem
-                        key={type}
-                        className='flex items-center space-x-3 space-y-0'
-                      >
-                        <FormControl>
-                          <RadioGroupItem value={type} />
-                        </FormControl>
-                        <FormLabel>{capitalize(type)}</FormLabel>
-                      </FormItem>
-                    )
-                  })}
-                </RadioGroup>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
       </form>
     </Form>
   )

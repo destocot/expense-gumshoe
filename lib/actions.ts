@@ -15,11 +15,7 @@ export const createExpense = async (values: unknown) => {
 
   const parsedValues = v.parse(CreateExpenseSchema, values)
 
-  await ExpenseModel.create({
-    amount: parsedValues.amount,
-    type: parsedValues.type,
-    userId: user.id,
-  })
+  await ExpenseModel.create({ ...parsedValues, userId: user.id })
   revalidatePath('/')
 }
 

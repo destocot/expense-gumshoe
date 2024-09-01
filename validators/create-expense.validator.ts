@@ -19,6 +19,10 @@ export const CreateExpenseSchema = v.object({
     ['expense', 'income'],
     'Your type must be either income or expense.',
   ),
+  description: v.pipe(
+    v.string('Your description must be a string.'),
+    v.nonEmpty('Please enter your description.'),
+  ),
 })
 
 export type CreateExpenseInput = v.InferInput<typeof CreateExpenseSchema>
