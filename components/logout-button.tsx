@@ -12,7 +12,7 @@ export const LogoutButton = () => {
     <Button
       variant='destructive'
       size='sm'
-      className='h-fit rounded-none'
+      className='h-full rounded-none'
       onClick={handleClick}
     >
       Logout

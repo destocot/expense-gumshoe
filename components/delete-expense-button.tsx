@@ -2,23 +2,25 @@
 
 import { Button } from '@/components/ui/button'
 import { deleteExpense } from '@/lib/actions'
+import { cn } from '@/lib/utils'
+import { Trash2Icon } from 'lucide-react'
 
-type DeleteExpenseButtonProps = { id: string }
+type DeleteExpenseButtonProps = { id: string; className?: string }
 
-const DeleteExpenseButton = ({ id }: DeleteExpenseButtonProps) => {
-  const clickHandler = async () => {
-    await deleteExpense({ id })
-  }
-
+export const DeleteExpenseButton = ({
+  id,
+  className,
+}: DeleteExpenseButtonProps) => {
   return (
     <Button
-      size='sm'
+      size='icon'
+      className={cn('h-fit w-fit p-0.5', className)}
       variant='destructive'
-      onClick={clickHandler}
-      className='w-auto max-w-[120px]'
+      onClick={async () => {
+        await deleteExpense({ id })
+      }}
     >
-      Delete
+      <Trash2Icon size={16} />
     </Button>
   )
 }
-export default DeleteExpenseButton

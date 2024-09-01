@@ -4,7 +4,7 @@ import { valibotResolver } from '@hookform/resolvers/valibot'
 import { useForm } from 'react-hook-form'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { createUser } from '@/lib/actions'
+import { createUser } from '../_actions/create-user.action'
 import {
   type RegisterInput,
   RegisterSchema,

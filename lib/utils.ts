@@ -15,3 +15,7 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
 export function formatMoney(amount: number) {
   return currencyFormatter.format(amount)
 }
+
+export function capitalize(str: string) {
+  return str.charAt(0).toUpperCase() + str.slice(1)
+}

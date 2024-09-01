@@ -1,6 +1,7 @@
 import { validateRequest } from '@/lib/validate-request'
 import { LogoutButton } from './logout-button'
 import Link from 'next/link'
+import { ModeToggle } from './mode-toggle'
 
 export const Header = async () => {
   const { user } = await validateRequest()
@@ -8,7 +9,7 @@ export const Header = async () => {
   return (
     <header className='bg-primary'>
       <nav className='container max-w-lg'>
-        <div className='rounded-b bg-primary px-2 text-right text-primary-foreground'>
+        <div className='h-5 bg-primary px-2 text-right text-primary-foreground'>
           {user ? <SignedIn username={user.username} /> : <SignedOut />}
         </div>
       </nav>
@@ -20,8 +21,9 @@ type SignedInProps = { username: string }
 
 const SignedIn = ({ username }: SignedInProps) => {
   return (
-    <div className='flex justify-end gap-x-4 text-sm'>
-      <span>{username}</span>
+    <div className='flex h-full items-center justify-end gap-x-2 text-sm'>
+      <span>Hello, {username}</span>
+      <ModeToggle />
       <LogoutButton />
     </div>
   )
@@ -29,8 +31,11 @@ const SignedIn = ({ username }: SignedInProps) => {
 
 const SignedOut = () => {
   return (
-    <Link href='/login' className='text-sm hover:text-primary-foreground/80'>
-      Login / Register
-    </Link>
+    <div className='flex h-full items-center justify-end gap-x-2'>
+      <Link href='/login' className='text-sm hover:text-primary-foreground/80'>
+        Login / Register
+      </Link>
+      <ModeToggle />
+    </div>
   )
 }
