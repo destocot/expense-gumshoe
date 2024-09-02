@@ -7,14 +7,7 @@ import { ExpenseBarChart } from './_components/expense-bar-chart'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import { HomeIcon } from 'lucide-react'
-import { Document } from 'mongoose'
-
-export const toObjects = <T extends Document>(
-  documents: T[],
-): Omit<T, keyof Document>[] =>
-  documents.map((document) => {
-    return document.toObject({ flattenObjectIds: true })
-  })
+import { toObjects } from '@/lib/utils'
 
 const findAllExpenses = async (userId: string) => {
   await dbConnect()

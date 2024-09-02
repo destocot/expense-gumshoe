@@ -1,15 +1,8 @@
 import type { Expense } from '@/models/Expense'
 import { ExpenseItem } from './expense-item'
-import { Document } from 'mongoose'
+import { toObjects } from '@/lib/utils'
 
 type ExpenseListProps = { expenses: Array<Expense> }
-
-const toObjects = <T extends Document>(
-  documents: T[],
-): Array<Omit<T, keyof Document> & { _id: string }> =>
-  documents.map((document) => {
-    return document.toObject({ flattenObjectIds: true })
-  })
 
 const ExpenseList = ({ expenses }: ExpenseListProps) => {
   const expensesObjects = toObjects(expenses)

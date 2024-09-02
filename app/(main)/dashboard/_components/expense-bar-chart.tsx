@@ -10,11 +10,12 @@ import {
 } from '@/components/ui/chart'
 import { type Expense } from '@/models/Expense'
 import { Document } from 'mongoose'
-import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts'
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts'
+import { endOfWeek, format, isWithinInterval, startOfWeek } from 'date-fns'
 
 const chartConfig = {
-  desktop: {
-    label: 'Desktop',
+  createdAt: {
+    label: 'createdAt',
     color: 'hsl(var(--chart-1))',
   },
   mobile: {
@@ -27,31 +28,37 @@ type BarChartProps = {
   expenses: Array<Omit<Expense, keyof Document<unknown, any, any>>>
 }
 
-const chartData = [
-  { month: 'January', desktop: 186, mobile: 80 },
-  { month: 'February', desktop: 305, mobile: 200 },
-  { month: 'March', desktop: 237, mobile: 120 },
-  { month: 'April', desktop: 73, mobile: 190 },
-  { month: 'May', desktop: 209, mobile: 130 },
-  { month: 'June', desktop: 214, mobile: 140 },
-]
-
 export const ExpenseBarChart = ({ expenses }: BarChartProps) => {
+  const startOfCurrentWeek = startOfWeek(new Date(), { weekStartsOn: 0 })
+  const endOfCurrentWeek = endOfWeek(new Date(), { weekStartsOn: 0 })
+
+  const currentWeekExpenses = expenses.filter((expense) =>
+    isWithinInterval(new Date(expense.createdAt), {
+      start: startOfCurrentWeek,
+      end: endOfCurrentWeek,
+    }),
+  )
+
   return (
     <ChartContainer config={chartConfig} className='h-[200px] w-full'>
-      <BarChart accessibilityLayer data={chartData}>
-        <CartesianGrid vertical={false} />
+      <BarChart accessibilityLayer data={currentWeekExpenses} layout='vertical'>
+        <CartesianGrid strokeDasharray='3 3' />
         <XAxis
-          dataKey='month'
+          type='number'
           tickLine={false}
           tickMargin={10}
           axisLine={false}
-          tickFormatter={(value) => value.slice(0, 3)}
+          tickFormatter={(value) => `$${value.toFixed(2)}`}
+        />
+        <YAxis
+          dataKey='createdAt'
+          tickFormatter={(value) => format(new Date(value), 'EEE')}
+          type='category'
+          axisLine={false}
         />
         <ChartTooltip content={<ChartTooltipContent />} />
         <ChartLegend content={<ChartLegendContent />} />
-        <Bar dataKey='desktop' fill='var(--color-desktop)' radius={4} />
-        <Bar dataKey='mobile' fill='var(--color-mobile)' radius={4} />
+        <Bar dataKey='amount' fill='var(--color-createdAt)' />
       </BarChart>
     </ChartContainer>
   )
