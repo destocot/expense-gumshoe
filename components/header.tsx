@@ -2,6 +2,7 @@ import { validateRequest } from '@/lib/validate-request'
 import { LogoutButton } from './logout-button'
 import Link from 'next/link'
 import { ModeToggle } from './mode-toggle'
+import { buttonVariants } from './ui/button'
 
 export const Header = async () => {
   const { user } = await validateRequest()
@@ -25,6 +26,16 @@ const SignedIn = ({ username }: SignedInProps) => {
     <div className='flex h-full items-center justify-end gap-x-2 text-sm'>
       <span>Hello, {username}</span>
       <ModeToggle />
+      <Link
+        href='/dashboard'
+        className={buttonVariants({
+          size: 'sm',
+          variant: 'ghost',
+          className: 'h-full rounded-none',
+        })}
+      >
+        Dashboard
+      </Link>
       <LogoutButton />
     </div>
   )
