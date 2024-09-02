@@ -5,11 +5,13 @@ import type { Expense } from '@/models/Expense'
 import { MinusCircleIcon, PlusCircleIcon } from 'lucide-react'
 import { DeleteExpenseButton } from '@/components/delete-expense-button'
 import { useState } from 'react'
+import { Document } from 'mongoose'
 
-type ExpenseItemProps = { expense: Expense }
+type ExpenseItemProps = {
+  expense: Omit<Expense, keyof Document<unknown, any, any>> & { _id: string }
+}
 
 export const ExpenseItem = ({ expense }: ExpenseItemProps) => {
-  const expenseId = expense._id as string
   const [isHovered, setIsHovered] = useState(false)
 
   return (
@@ -48,7 +50,7 @@ export const ExpenseItem = ({ expense }: ExpenseItemProps) => {
           },
         )}
       >
-        <DeleteExpenseButton expenseId={expenseId} className='rounded-none' />
+        <DeleteExpenseButton expenseId={expense._id} className='rounded-none' />
       </div>
     </li>
   )

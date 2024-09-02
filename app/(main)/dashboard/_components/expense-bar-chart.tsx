@@ -9,6 +9,7 @@ import {
   type ChartConfig,
 } from '@/components/ui/chart'
 import { type Expense } from '@/models/Expense'
+import { Document } from 'mongoose'
 import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts'
 
 const chartConfig = {
@@ -22,7 +23,9 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-type BarChartProps = { expenses: Array<Expense> }
+type BarChartProps = {
+  expenses: Array<Omit<Expense, keyof Document<unknown, any, any>>>
+}
 
 const chartData = [
   { month: 'January', desktop: 186, mobile: 80 },

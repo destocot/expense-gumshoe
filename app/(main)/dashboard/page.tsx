@@ -1,12 +1,20 @@
 import Brand from '@/components/brand'
 import dbConnect from '@/lib/dbConnect'
 import { validateRequest } from '@/lib/validate-request'
-import ExpenseModel from '@/models/Expense'
+import ExpenseModel, { Expense } from '@/models/Expense'
 import { redirect } from 'next/navigation'
 import { ExpenseBarChart } from './_components/expense-bar-chart'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import { HomeIcon } from 'lucide-react'
+import { Document } from 'mongoose'
+
+export const toObjects = <T extends Document>(
+  documents: T[],
+): Omit<T, keyof Document>[] =>
+  documents.map((document) => {
+    return document.toObject({ flattenObjectIds: true })
+  })
 
 const findAllExpenses = async (userId: string) => {
   await dbConnect()
@@ -22,7 +30,8 @@ export default async function DashboardPage() {
 
   if (!user) redirect('/login')
 
-  const expenses = await findAllExpenses(user.id)
+  const _expenses = (await findAllExpenses(user.id)) as Array<Expense>
+  const expenses = toObjects(_expenses)
 
   return (
     <main>
@@ -34,7 +43,7 @@ export default async function DashboardPage() {
           </Link>
         </div>
         <div className='rounded border'>
-          <ExpenseBarChart expenses={JSON.parse(JSON.stringify(expenses))} />
+          <ExpenseBarChart expenses={expenses} />
         </div>
       </div>
     </main>
