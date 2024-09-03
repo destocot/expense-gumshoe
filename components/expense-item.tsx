@@ -22,7 +22,7 @@ export const ExpenseItem = ({ expense }: ExpenseItemProps) => {
     >
       <div
         className={cn('flex flex-col rounded border bg-background', {
-          'w-[90%]': isHovered,
+          'w-[90%] rounded-r-none': isHovered,
         })}
       >
         <div className='p-1.5'>

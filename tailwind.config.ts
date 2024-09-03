@@ -1,5 +1,7 @@
 import type { Config } from 'tailwindcss'
 
+const plugin = require('tailwindcss/plugin')
+
 const config = {
   darkMode: ['class'],
 
@@ -20,6 +22,10 @@ const config = {
       },
     },
     extend: {
+      backgroundImage: {
+        'body-texture':
+          "url('https://www.transparenttextures.com/patterns/darth-stripe.png')",
+      },
       colors: {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
@@ -80,7 +86,12 @@ const config = {
       },
     },
   },
-  plugins: [require('tailwindcss-animate')],
+  plugins: [
+    require('tailwindcss-animate'),
+    plugin(function ({ addVariant }: any) {
+      addVariant('cyberpunk', '.cyberpunk &')
+    }),
+  ],
 } satisfies Config
 
 export default config

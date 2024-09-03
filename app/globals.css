@@ -61,39 +61,34 @@
     --success: 120 34% 29%;
     --success-foreground: 210 20% 98%;
   }
-  /* "primary": "oklch(74.22% 0.209 6.35)",
-    "secondary": "oklch(83.33% 0.184 204.72)",
-    "accent": "oklch(71.86% 0.2176 310.43)",
-    "neutral": "oklch(23.04% 0.065 269.31)",
-    "neutral-content": "oklch(94.51% 0.179 104.32)",
-    "base-100": "oklch(94.51% 0.179 104.32)" */
+
   .cyberpunk {
-    --background: 240, 10%, 23%;
-    --foreground: 104, 18%, 94%;
-    --card: 240, 10%, 23%;
-    --card-foreground: 104, 18%, 94%;
-    --popover: 240, 12%, 23%;
-    --popover-foreground: 104, 18%, 94%;
-    --primary: 6, 21%, 74%;
-    --primary-foreground: 204, 18%, 83%;
-    --secondary: 310, 22%, 72%;
-    --secondary-foreground: 240, 10%, 23%;
-    --muted: 240, 10%, 23%;
-    --muted-foreground: 104, 18%, 94%;
-    --accent: 310, 22%, 72%;
-    --accent-foreground: 6, 21%, 74%;
-    --destructive: 6, 21%, 74%;
-    --destructive-foreground: 98, 18%, 94%;
-    --border: 104, 18%, 94%;
-    --input: 240, 12%, 23%;
-    --ring: 104, 18%, 94%;
-    --chart-1: 104, 18%, 94%;
-    --chart-2: 310, 22%, 72%;
-    --chart-3: 204, 18%, 83%;
-    --chart-4: 6, 21%, 74%;
-    --chart-5: 104, 18%, 94%;
-    --success: 6, 21%, 74%;
-    --success-foreground: 104, 18%, 94%;
+    --background: 240 100% 10%;
+    --foreground: 60 100% 80%;
+    --card: 240 100% 15%;
+    --card-foreground: 60 100% 80%;
+    --popover: 240 100% 15%;
+    --popover-foreground: 60 100% 80%;
+    --primary: 342.69 100% 72%;
+    --primary-foreground: 240 100% 10%;
+    --secondary: 184.9 100% 50%;
+    --secondary-foreground: 240 100% 10%;
+    --muted: 240 100% 15%;
+    --muted-foreground: 342.69 100% 72%;
+    --accent: 278.94 100% 73%;
+    --accent-foreground: 240 100% 10%;
+    --destructive: 330 100% 50%;
+    --destructive-foreground: 240 100% 10%;
+    --border: 330 100% 50%;
+    --input: 240 100% 20%;
+    --ring: 60 100% 80%;
+    --chart-1: 342.69 100% 72%;
+    --chart-2: 184.9 100% 50%;
+    --chart-3: 278.94 100% 73%;
+    --chart-4: 240 100% 10%;
+    --chart-5: 60 100% 80%;
+    --success: 60 100% 80%;
+    --success-foreground: 240 100% 10%;
   }
 }
 
@@ -105,3 +100,12 @@
     @apply bg-background text-foreground;
   }
 }
+
+/*
+primary: hsl(342.69 100% 72%)
+secondary: hsl(184.9 100% 49%)
+accent: hsl(278.94 100% 73%)
+neutral: hsl(227.15 56.00000000000001% 15%)
+neutral-content: hsl(55.76 100% 64%)
+base-100: hsl(55.76 100% 64%)
+*/

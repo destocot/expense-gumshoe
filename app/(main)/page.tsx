@@ -48,7 +48,10 @@ const SignedIn = async ({ userId }: SignedInProps) => {
         {formatMoney(total)}
       </h1>
       <CreateExpenseForm />
-      <ExpenseList expenses={expenses} />
+
+      <div className='h-48'>
+        <ExpenseList expenses={expenses} />
+      </div>
     </>
   )
 }
