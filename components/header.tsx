@@ -24,7 +24,7 @@ type SignedInProps = { username: string }
 const SignedIn = ({ username }: SignedInProps) => {
   return (
     <div className='flex h-full items-center justify-end gap-x-2 text-sm'>
-      <span>Hello, {username}</span>
+      <span className='whitespace-nowrap'>Hello, {username}</span>
       <ModeToggle />
       <Link
         href='/dashboard'

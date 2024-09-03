@@ -24,7 +24,7 @@ const config = {
     extend: {
       backgroundImage: {
         'body-texture':
-          "url('https://www.transparenttextures.com/patterns/darth-stripe.png')",
+          "url('https://www.transparenttextures.com/patterns/subtle-dots.png')",
       },
       colors: {
         border: 'hsl(var(--border))',
