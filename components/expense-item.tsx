@@ -1,56 +1,37 @@
 'use client'
 
-import { cn, formatMoney } from '@/lib/utils'
+import { formatMoney } from '@/lib/utils'
 import type { Expense } from '@/models/Expense'
 import { MinusCircleIcon, PlusCircleIcon } from 'lucide-react'
 import { DeleteExpenseButton } from '@/components/delete-expense-button'
-import { useState } from 'react'
 import { Document } from 'mongoose'
+import { UpdateExpenseButton } from './update-expense-button'
 
 type ExpenseItemProps = {
   expense: Omit<Expense, keyof Document<unknown, any, any>> & { _id: string }
 }
 
 export const ExpenseItem = ({ expense }: ExpenseItemProps) => {
-  const [isHovered, setIsHovered] = useState(false)
-
   return (
-    <li
-      className='relative overflow-hidden rounded'
-      onMouseEnter={() => void setIsHovered(true)}
-      onMouseLeave={() => void setIsHovered(false)}
-    >
-      <div
-        className={cn('flex flex-col rounded border bg-background', {
-          'w-[90%] rounded-r-none': isHovered,
-        })}
-      >
-        <div className='p-1.5'>
+    <li className='group bg-background'>
+      <div className='flex justify-between rounded p-1.5'>
+        <div>
           <span className='text-sm'>{expense.description}</span>
 
-          <div className='flex items-end justify-between'>
-            <div className='flex items-center gap-x-2'>
-              <ExpenseIcon type={expense.type} />
-              <span className='tabular-nums'>
-                {formatMoney(expense.amount)}
-              </span>
-            </div>
-            <span className='text-xs opacity-50'>
-              {new Date(expense.createdAt).toLocaleDateString()}
-            </span>
+          <div className='flex items-center gap-x-2'>
+            <ExpenseIcon type={expense.type} />
+            <span className='tabular-nums'>{formatMoney(expense.amount)}</span>
           </div>
         </div>
-      </div>
-      <div
-        className={cn(
-          'absolute bottom-0 right-0 top-0 w-[10%] cursor-pointer',
-          {
-            'opacity-0': !isHovered,
-            'opacity-100': isHovered,
-          },
-        )}
-      >
-        <DeleteExpenseButton expenseId={expense._id} className='rounded-none' />
+
+        <span className='self-end text-xs opacity-50 group-hover:hidden'>
+          {new Date(expense.createdAt).toLocaleDateString()}
+        </span>
+
+        <div className='hidden gap-x-1.5 group-hover:flex'>
+          <UpdateExpenseButton expenseId={expense._id} className='px-1.5' />
+          <DeleteExpenseButton expenseId={expense._id} className='px-1.5' />
+        </div>
       </div>
     </li>
   )

@@ -25,7 +25,7 @@ export default function RootLayout({
           attribute='class'
           defaultTheme='light'
           disableTransitionOnChange
-          themes={['light', 'dark', 'cyberpunk']}
+          themes={['light', 'dark', 'cobalt']}
         >
           {children}
         </ThemeProvider>

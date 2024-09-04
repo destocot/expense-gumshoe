@@ -8,7 +8,7 @@ const ExpenseList = ({ expenses }: ExpenseListProps) => {
   const expensesObjects = toObjects(expenses)
 
   return (
-    <ul className='flex flex-col gap-y-2'>
+    <ul className='flex flex-col gap-y-2.5'>
       {expensesObjects.map((expense) => {
         return <ExpenseItem key={expense._id} expense={expense} />
       })}

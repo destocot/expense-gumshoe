@@ -89,7 +89,7 @@ const config = {
   plugins: [
     require('tailwindcss-animate'),
     plugin(function ({ addVariant }: any) {
-      addVariant('cyberpunk', '.cyberpunk &')
+      addVariant('cobalt', '.cobalt &')
     }),
   ],
 } satisfies Config

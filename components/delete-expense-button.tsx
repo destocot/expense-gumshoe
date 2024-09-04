@@ -13,7 +13,7 @@ export const DeleteExpenseButton = ({
 }: DeleteExpenseButtonProps) => {
   return (
     <Button
-      className={cn('h-full w-full p-0', className)}
+      className={cn('h-full w-full', className)}
       variant='destructive'
       onClick={async () => {
         await deleteExpense({ id: expenseId })

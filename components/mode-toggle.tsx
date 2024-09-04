@@ -20,19 +20,19 @@ export function ModeToggle() {
         <Button
           variant='secondary'
           size='sm'
-          className='cyberpunk:px-100 h-full rounded-none'
+          className='cobalt:px-100 h-full rounded-none'
         >
           <SunIcon
             size={16}
-            className='cyberpunk:-rotate-90 cyberpunk:scale-0 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0'
+            className='cobalt:-rotate-90 cobalt:scale-0 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0'
           />
           <MoonIcon
             size={16}
-            className='cyberpunk:-rotate-90 cyberpunk:scale-0 absolute rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100'
+            className='cobalt:-rotate-90 cobalt:scale-0 absolute rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100'
           />
           <CircuitBoardIcon
             size={16}
-            className='cyberpunk:rotate-0 cyberpunk:scale-100 absolute rotate-90 scale-0 transition-all dark:-rotate-90 dark:scale-0'
+            className='cobalt:rotate-0 cobalt:scale-100 absolute rotate-90 scale-0 stroke-black transition-all dark:-rotate-90 dark:scale-0'
           />
 
           <span className='sr-only'>Toggle theme</span>
@@ -45,8 +45,8 @@ export function ModeToggle() {
         <DropdownMenuItem onClick={() => setTheme('dark')}>
           Dark
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme('cyberpunk')}>
-          Cyberpunk
+        <DropdownMenuItem onClick={() => setTheme('cobalt')}>
+          Cobalt
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
