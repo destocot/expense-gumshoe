@@ -23,9 +23,7 @@ const findAllExpenses = async (userId: string) => {
   await dbConnect()
   const expenses = await ExpenseModel.find({
     userId,
-  })
-    .sort({ createdAt: -1 })
-    .limit(5)
+  }).sort({ createdAt: -1 })
 
   return expenses
 }
@@ -38,6 +36,8 @@ const SignedIn = async ({ userId }: SignedInProps) => {
     if (expense.type === 'income') return acc + expense.amount
     if (expense.type === 'expense') return acc - expense.amount
   }, 0)
+
+  const slicedExpenses = expenses.slice(0, 8)
 
   return (
     <>
@@ -52,7 +52,7 @@ const SignedIn = async ({ userId }: SignedInProps) => {
       <CreateExpenseForm />
 
       <div className='h-48'>
-        <ExpenseList expenses={expenses} />
+        <ExpenseList expenses={slicedExpenses} />
       </div>
     </>
   )

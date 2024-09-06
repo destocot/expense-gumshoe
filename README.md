@@ -11,5 +11,5 @@
 
 ### V1.2
 
-- added themes light, dark, and nightowl
+- added themes light, dark, and blue
 - added confirmation dialog to delete expense

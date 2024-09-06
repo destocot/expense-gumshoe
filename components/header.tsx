@@ -11,7 +11,7 @@ export const Header = async () => {
   return (
     <header className='bg-primary'>
       <nav className='container max-w-lg'>
-        <div className='h-5 bg-primary px-2 text-right text-primary-foreground'>
+        <div className='h-6 bg-primary px-2 text-right text-primary-foreground'>
           {user ? <SignedIn username={user.username} /> : <SignedOut />}
         </div>
       </nav>

@@ -89,7 +89,7 @@ const config = {
   plugins: [
     require('tailwindcss-animate'),
     plugin(function ({ addVariant }: any) {
-      addVariant('nightowl', '.nightowl &')
+      addVariant('blue', '.blue &')
     }),
   ],
 } satisfies Config
