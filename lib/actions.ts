@@ -8,6 +8,7 @@ import { redirect } from 'next/navigation'
 import { validateRequest } from './validate-request'
 import * as v from 'valibot'
 import { CreateExpenseSchema } from '@/validators/create-expense.validator'
+import { UpdateExpenseSchema } from '@/validators/update-expense.validator'
 
 export const createExpense = async (values: unknown) => {
   const { user } = await validateRequest()
@@ -16,6 +17,19 @@ export const createExpense = async (values: unknown) => {
   const parsedValues = v.parse(CreateExpenseSchema, values)
 
   await ExpenseModel.create({ ...parsedValues, userId: user.id })
+  revalidatePath('/')
+}
+
+export const updateExpense = async (values: unknown) => {
+  const { user } = await validateRequest()
+  if (!user) throw new Error('Unauthorized')
+
+  const parsedValues = v.parse(UpdateExpenseSchema, values)
+
+  await ExpenseModel.findByIdAndUpdate(parsedValues._id, {
+    ...parsedValues,
+    userId: user.id,
+  })
   revalidatePath('/')
 }
 

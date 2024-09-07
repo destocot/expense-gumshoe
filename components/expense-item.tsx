@@ -28,7 +28,7 @@ export const ExpenseItem = ({ expense }: ExpenseItemProps) => {
         </span>
 
         <div className='hidden gap-x-1.5 group-hover:flex'>
-          <UpdateExpenseButton expenseId={expenseId} className='px-1.5' />
+          <UpdateExpenseButton expense={expense} className='px-1.5' />
           <DeleteExpenseButton expenseId={expenseId} className='px-1.5' />
         </div>
       </div>
