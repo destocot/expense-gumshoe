@@ -13,3 +13,5 @@
 
 - added themes light, dark, and blue
 - added confirmation dialog to delete expense
+- added update expense form
+- mobile responsive dialog components
