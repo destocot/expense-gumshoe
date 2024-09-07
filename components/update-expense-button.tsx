@@ -28,11 +28,11 @@ export const UpdateExpenseButton = ({
         </Button>
       </DialogTrigger>
 
-      <DialogContent className='sm:max-w-xs'>
+      <DialogContent className='max-w-xs'>
         <DialogHeader>
           <DialogTitle>Are you sure?</DialogTitle>
         </DialogHeader>
-        <DialogFooter className='flex gap-x-2'>
+        <DialogFooter className='flex gap-2 sm:flex-row-reverse'>
           <DialogClose className='flex-1' asChild>
             <Button variant='ghost'>Cancel</Button>
           </DialogClose>

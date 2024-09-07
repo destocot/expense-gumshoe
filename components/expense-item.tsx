@@ -4,14 +4,13 @@ import { formatMoney } from '@/lib/utils'
 import type { Expense } from '@/models/Expense'
 import { MinusCircleIcon, PlusCircleIcon } from 'lucide-react'
 import { DeleteExpenseButton } from '@/components/delete-expense-button'
-import { Document } from 'mongoose'
 import { UpdateExpenseButton } from './update-expense-button'
 
-type ExpenseItemProps = {
-  expense: Omit<Expense, keyof Document<unknown, any, any>> & { _id: string }
-}
+type ExpenseItemProps = { expense: Expense }
 
 export const ExpenseItem = ({ expense }: ExpenseItemProps) => {
+  const expenseId = expense._id.toString()
+
   return (
     <li className='group bg-background'>
       <div className='flex justify-between rounded p-1.5'>
@@ -29,8 +28,8 @@ export const ExpenseItem = ({ expense }: ExpenseItemProps) => {
         </span>
 
         <div className='hidden gap-x-1.5 group-hover:flex'>
-          <UpdateExpenseButton expenseId={expense._id} className='px-1.5' />
-          <DeleteExpenseButton expenseId={expense._id} className='px-1.5' />
+          <UpdateExpenseButton expenseId={expenseId} className='px-1.5' />
+          <DeleteExpenseButton expenseId={expenseId} className='px-1.5' />
         </div>
       </div>
     </li>

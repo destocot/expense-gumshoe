@@ -2,6 +2,7 @@ import { Document, Schema, models, model } from 'mongoose'
 import { TYPES } from '@/lib/constants'
 
 export type Expense = Document & {
+  _id: Schema.Types.ObjectId
   userId: Schema.Types.ObjectId
   amount: number
   type: (typeof TYPES)[number]

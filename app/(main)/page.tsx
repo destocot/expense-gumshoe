@@ -1,10 +1,9 @@
 import Brand from '@/components/brand'
 import CreateExpenseForm from '@/components/create-expense-form'
 import ExpenseList from '@/components/expense-list'
-import dbConnect from '@/lib/dbConnect'
 import { cn, formatMoney } from '@/lib/utils'
 import { validateRequest } from '@/lib/validate-request'
-import ExpenseModel from '@/models/Expense'
+import { findAllExpensesByUserId } from '@/queries/expenses.queries'
 
 const HomePage = async () => {
   const { user } = await validateRequest()
@@ -19,19 +18,10 @@ const HomePage = async () => {
   )
 }
 
-const findAllExpenses = async (userId: string) => {
-  await dbConnect()
-  const expenses = await ExpenseModel.find({
-    userId,
-  }).sort({ createdAt: -1 })
-
-  return expenses
-}
-
 type SignedInProps = { userId: string }
 
 const SignedIn = async ({ userId }: SignedInProps) => {
-  const expenses = await findAllExpenses(userId)
+  const expenses = await findAllExpensesByUserId(userId)
   const total = expenses.reduce((acc, expense) => {
     if (expense.type === 'income') return acc + expense.amount
     if (expense.type === 'expense') return acc - expense.amount

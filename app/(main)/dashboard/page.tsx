@@ -1,30 +1,17 @@
 import Brand from '@/components/brand'
-import dbConnect from '@/lib/dbConnect'
 import { validateRequest } from '@/lib/validate-request'
-import ExpenseModel, { Expense } from '@/models/Expense'
 import { redirect } from 'next/navigation'
 import { ExpenseBarChart } from './_components/expense-bar-chart'
 import Link from 'next/link'
 import { buttonVariants } from '@/components/ui/button'
 import { HomeIcon } from 'lucide-react'
-import { toObjects } from '@/lib/utils'
-
-const findAllExpenses = async (userId: string) => {
-  await dbConnect()
-  const expenses = await ExpenseModel.find({
-    userId,
-  }).sort({ createdAt: -1 })
-
-  return expenses
-}
+import { findAllExpensesByUserId } from '@/queries/expenses.queries'
 
 export default async function DashboardPage() {
   const { user } = await validateRequest()
-
   if (!user) redirect('/login')
 
-  const _expenses = (await findAllExpenses(user.id)) as Array<Expense>
-  const expenses = toObjects(_expenses)
+  const expenses = await findAllExpensesByUserId(user.id)
 
   return (
     <main>
