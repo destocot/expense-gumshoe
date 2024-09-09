@@ -36,7 +36,7 @@ export const ExpenseItem = ({ expense }: ExpenseItemProps) => {
   )
 }
 
-const ExpenseIcon = ({ type }: { type: 'income' | 'expense' }) => {
+const ExpenseIcon = ({ type }: { type: Expense['type'] }) => {
   if (type === 'income') {
     return <PlusCircleIcon size={16} className='stroke-success' />
   }

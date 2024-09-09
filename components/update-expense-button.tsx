@@ -80,7 +80,7 @@ const UpdateExpenseForm = ({
     defaultValues: {
       amount: expense.amount,
       description: expense.description,
-      type: expense.type,
+      type: expense.type as 'income' | 'expense',
       _id: expense._id.toString(),
     },
   })
@@ -163,9 +163,7 @@ const UpdateExpenseForm = ({
                     value={field.value}
                     className='flex flex-col'
                   >
-                    {TYPES.map((type) => {
-                      if (type === 'savings') return null
-                      if (type === 'other') return null
+                    {['income', 'expense'].map((type) => {
                       return (
                         <FormItem
                           key={type}
