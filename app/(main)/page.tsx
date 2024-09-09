@@ -1,9 +1,13 @@
 import Brand from '@/components/brand'
 import CreateExpenseForm from '@/components/create-expense-form'
+import { DepositCheckButton } from '@/components/deposit-check-form'
 import ExpenseList from '@/components/expense-list'
 import { cn, formatMoney } from '@/lib/utils'
 import { validateRequest } from '@/lib/validate-request'
-import { findAllExpensesByUserId } from '@/queries/expenses.queries'
+import {
+  findAllExpensesByUserId,
+  findIncomeAndExpenseByUserId,
+} from '@/queries/expenses.queries'
 
 const HomePage = async () => {
   const { user } = await validateRequest()
@@ -21,10 +25,11 @@ const HomePage = async () => {
 type SignedInProps = { userId: string }
 
 const SignedIn = async ({ userId }: SignedInProps) => {
-  const expenses = await findAllExpensesByUserId(userId)
+  const expenses = await findIncomeAndExpenseByUserId(userId)
   const total = expenses.reduce((acc, expense) => {
     if (expense.type === 'income') return acc + expense.amount
-    if (expense.type === 'expense') return acc - expense.amount
+    else if (expense.type === 'expense') return acc - expense.amount
+    else return acc
   }, 0)
 
   const slicedExpenses = expenses.slice(0, 8)
@@ -39,11 +44,12 @@ const SignedIn = async ({ userId }: SignedInProps) => {
       >
         {formatMoney(total)}
       </h1>
+
       <CreateExpenseForm />
 
-      <div className='h-48'>
-        <ExpenseList expenses={slicedExpenses} />
-      </div>
+      <DepositCheckButton />
+
+      <ExpenseList expenses={slicedExpenses} />
     </>
   )
 }

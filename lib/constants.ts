@@ -1,1 +1,1 @@
-export const TYPES = ['income', 'expense'] as const
+export const TYPES = ['income', 'expense', 'savings', 'other'] as const

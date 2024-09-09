@@ -4,6 +4,7 @@ import { TYPES } from '@/lib/constants'
 export type Expense = Document & {
   _id: Schema.Types.ObjectId
   userId: Schema.Types.ObjectId
+  checkId?: Schema.Types.ObjectId
   amount: number
   type: (typeof TYPES)[number]
   description: string
@@ -14,6 +15,7 @@ export type Expense = Document & {
 const ExpenseSchema = new Schema<Expense>(
   {
     userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+    checkId: { type: Schema.Types.ObjectId, ref: 'Check' },
     amount: { type: Number, required: true },
     type: { type: String, enum: TYPES, required: true },
     description: { type: String, required: true },

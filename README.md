@@ -15,3 +15,5 @@
 - added confirmation dialog to delete expense
 - added update expense form
 - mobile responsive dialog components
+
+### V1.3

@@ -164,6 +164,8 @@ const UpdateExpenseForm = ({
                     className='flex flex-col'
                   >
                     {TYPES.map((type) => {
+                      if (type === 'savings') return null
+                      if (type === 'other') return null
                       return (
                         <FormItem
                           key={type}
