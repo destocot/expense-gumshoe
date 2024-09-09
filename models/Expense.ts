@@ -1,10 +1,10 @@
 import { Document, Schema, models, model } from 'mongoose'
 import { TYPES } from '@/lib/constants'
 
-export type Expense = Document & {
-  _id: Schema.Types.ObjectId
-  userId: Schema.Types.ObjectId
-  checkId?: Schema.Types.ObjectId
+export type Expense = {
+  _id: string
+  userId: string
+  checkId?: string
   amount: number
   type: (typeof TYPES)[number]
   description: string
@@ -12,7 +12,7 @@ export type Expense = Document & {
   updatedAt: Date
 }
 
-const ExpenseSchema = new Schema<Expense>(
+const ExpenseSchema = new Schema(
   {
     userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     checkId: { type: Schema.Types.ObjectId, ref: 'Check' },
@@ -20,7 +20,20 @@ const ExpenseSchema = new Schema<Expense>(
     type: { type: String, enum: TYPES, required: true },
     description: { type: String, required: true },
   },
-  { timestamps: true, versionKey: false },
+  {
+    timestamps: true,
+    versionKey: false,
+    toJSON: {
+      transform: (doc, ret) => {
+        ret._id = ret._id.toString()
+        ret.userId = ret.userId.toString()
+        if (ret.checkId) {
+          ret.checkId = ret.checkId.toString()
+        }
+        return ret
+      },
+    },
+  },
 )
 
 const ExpenseModel = models.Expense ?? model<Expense>('Expense', ExpenseSchema)

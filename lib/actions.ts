@@ -11,7 +11,6 @@ import { CreateExpenseSchema } from '@/validators/create-expense.validator'
 import { UpdateExpenseSchema } from '@/validators/update-expense.validator'
 import { DepositCheckSchema } from '@/validators/deposit-check.validator'
 import CheckModel from '@/models/Check'
-import { ObjectId } from 'mongoose'
 import { UpdateDepositCheckBreakdownSchema } from '@/validators/update-deposit-check-breakdown.validator'
 import UserModel from '@/models/User'
 
@@ -98,21 +97,21 @@ export const depositCheck = async (values: unknown) => {
       type: 'income',
       amount: incomeAmount,
       description: `Check deposit ${newCheck.id}`,
-      userId: authUser.id as unknown as ObjectId,
+      userId: authUser.id,
       checkId: newCheck.id,
     },
     {
       type: 'savings',
       amount: savingsAmount,
       description: `Check deposit ${newCheck.id}`,
-      userId: authUser.id as unknown as ObjectId,
+      userId: authUser.id,
       checkId: newCheck.id,
     },
     {
       type: 'other',
       amount: otherAmount,
       description: `Check deposit ${newCheck.id}`,
-      userId: authUser.id as unknown as ObjectId,
+      userId: authUser.id,
       checkId: newCheck.id,
     },
   ]

@@ -19,13 +19,20 @@ export const Brand = ({ className }: BrandProps) => {
   )
 }
 
-export const BrandWithHomeLink = () => (
-  <div className='flex items-center justify-between'>
+export const BrandWithHomeLink = ({
+  children,
+}: {
+  children?: React.ReactNode
+}) => (
+  <div className='flex w-full items-center justify-between'>
     <Brand />
-    <Button size='icon' className='size-8' asChild>
-      <Link href='/'>
-        <HomeIcon />
-      </Link>
-    </Button>
+    <div className='flex gap-x-2'>
+      <Button size='icon' className='size-8' asChild>
+        <Link href='/'>
+          <HomeIcon />
+        </Link>
+      </Button>
+      {children}
+    </div>
   </div>
 )

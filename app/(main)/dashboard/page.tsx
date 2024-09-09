@@ -1,12 +1,11 @@
-import { Brand } from '@/components/brand'
+import { Brand, BrandWithHomeLink } from '@/components/brand'
 import { validateRequest } from '@/lib/validate-request'
 import { redirect } from 'next/navigation'
 import { ExpenseBarChart } from './_components/expense-bar-chart'
 import Link from 'next/link'
 import { Button, buttonVariants } from '@/components/ui/button'
-import { HomeIcon, Settings2Icon } from 'lucide-react'
-import { findAllExpensesByUserId } from '@/queries/expenses.queries'
-import { Expense } from '@/models/Expense'
+import { HomeIcon } from 'lucide-react'
+import { findExpenses } from '@/queries/expenses.queries'
 import { formatMoney } from '@/lib/utils'
 import UserModel from '@/models/User'
 import { SettingsButton } from './_components/settings-button'
@@ -16,7 +15,7 @@ export default async function DashboardPage() {
   const { user: authUser } = await validateRequest()
   if (!authUser) redirect('/login')
 
-  const expenses: Array<Expense> = await findAllExpensesByUserId(authUser.id)
+  const expenses = await findExpenses()
 
   const totals = expenses.reduce(
     (acc, expense) => {
@@ -35,14 +34,10 @@ export default async function DashboardPage() {
   return (
     <main>
       <div className='flex flex-col gap-y-6 py-16'>
-        <div className='flex items-start justify-between'>
-          <Brand />
-          <div className='flex gap-x-2'>
-            <Link href='/' className={buttonVariants({ size: 'icon' })}>
-              <HomeIcon />
-            </Link>
+        <div className='flex'>
+          <BrandWithHomeLink>
             <SettingsButton />
-          </div>
+          </BrandWithHomeLink>
         </div>
         <h2 className='text-2xl font-bold'>{authUser.username}'s Dashboard</h2>
         <div>

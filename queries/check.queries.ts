@@ -1,3 +1,4 @@
+import dbConnect from '@/lib/dbConnect'
 import { validateRequest } from '@/lib/validate-request'
 import CheckModel, { Check } from '@/models/Check'
 import { redirect } from 'next/navigation'
@@ -7,6 +8,8 @@ export const findCheckByCheckId = async (
 ): Promise<Check | null> => {
   const { user: authUser } = await validateRequest()
   if (!authUser) redirect('/login')
+
+  await dbConnect()
 
   const checkDoc = await CheckModel.findOne({
     _id: checkId,

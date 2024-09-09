@@ -32,7 +32,7 @@ export const SettingsButton = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button size='icon'>
+        <Button size='icon' className='size-8'>
           <Settings2Icon />
         </Button>
       </DialogTrigger>

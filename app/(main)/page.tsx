@@ -4,28 +4,24 @@ import { DepositCheckButton } from '@/components/deposit-check-form'
 import ExpenseList from '@/components/expense-list'
 import { cn, formatMoney } from '@/lib/utils'
 import { validateRequest } from '@/lib/validate-request'
-import {
-  findAllExpensesByUserId,
-  findIncomeAndExpenseByUserId,
-} from '@/queries/expenses.queries'
+import { findExpenses } from '@/queries/expenses.queries'
 
 const HomePage = async () => {
-  const { user } = await validateRequest()
+  const { user: authUser } = await validateRequest()
 
   return (
     <main>
       <div className='flex flex-col gap-y-4 py-16'>
         <Brand />
-        {user ? <SignedIn userId={user.id} /> : <SignedOut />}
+        {!!authUser ? <SignedIn /> : <SignedOut />}
       </div>
     </main>
   )
 }
 
-type SignedInProps = { userId: string }
+const SignedIn = async () => {
+  const expenses = await findExpenses()
 
-const SignedIn = async ({ userId }: SignedInProps) => {
-  const expenses = await findIncomeAndExpenseByUserId(userId)
   const total = expenses.reduce((acc, expense) => {
     if (expense.type === 'income') return acc + expense.amount
     else if (expense.type === 'expense') return acc - expense.amount

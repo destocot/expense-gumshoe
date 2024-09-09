@@ -1,33 +1,21 @@
 import dbConnect from '@/lib/dbConnect'
-import ExpenseModel from '@/models/Expense'
+import { validateRequest } from '@/lib/validate-request'
+import ExpenseModel, { Expense } from '@/models/Expense'
+import { redirect } from 'next/navigation'
 
-export const findIncomeAndExpenseByUserId = async (userId: string) => {
+export const findExpenses = async (): Promise<Array<Expense>> => {
+  const { user: authUser } = await validateRequest()
+  if (!authUser) redirect('/login')
+
   await dbConnect()
 
   const expenseDocs = await ExpenseModel.find({
-    userId,
-    type: { $in: ['income', 'expense'] },
+    userId: authUser.id,
   }).sort({
     createdAt: -1,
   })
 
-  const expenses = expenseDocs.map((doc) =>
-    doc.toObject({ flattenObjectIds: true }),
-  )
-
-  return expenses
-}
-
-export const findAllExpensesByUserId = async (userId: string) => {
-  await dbConnect()
-
-  const expenseDocs = await ExpenseModel.find({ userId }).sort({
-    createdAt: -1,
-  })
-
-  const expenses = expenseDocs.map((doc) =>
-    doc.toObject({ flattenObjectIds: true }),
-  )
+  const expenses: Array<Expense> = expenseDocs.map((doc) => doc.toJSON())
 
   return expenses
 }
