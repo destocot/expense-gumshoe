@@ -11,7 +11,9 @@ import { CreateExpenseSchema } from '@/validators/create-expense.validator'
 import { UpdateExpenseSchema } from '@/validators/update-expense.validator'
 import { DepositCheckSchema } from '@/validators/deposit-check.validator'
 import CheckModel from '@/models/Check'
-import { ObjectId, Types } from 'mongoose'
+import { ObjectId } from 'mongoose'
+import { UpdateDepositCheckBreakdownSchema } from '@/validators/update-deposit-check-breakdown.validator'
+import UserModel from '@/models/User'
 
 export const createExpense = async (values: unknown) => {
   const { user } = await validateRequest()
@@ -58,19 +60,36 @@ export const logoutUser = async () => {
   redirect('/login')
 }
 
-export const depositCheck = async (values: unknown) => {
+export const updateDepositCheckBreakdown = async (values: unknown) => {
   const { user } = await validateRequest()
   if (!user) throw new Error('Unauthorized')
+
+  const parsedValues = v.parse(UpdateDepositCheckBreakdownSchema, values)
+
+  await UserModel.findByIdAndUpdate(user.id, {
+    checkDepositBreakdown: parsedValues,
+  })
+
+  revalidatePath('/dashboard')
+}
+
+export const depositCheck = async (values: unknown) => {
+  const { user: authUser } = await validateRequest()
+  if (!authUser) throw new Error('Unauthorized')
 
   const parsedValues = v.parse(DepositCheckSchema, values)
 
   const amount = parseFloat(parsedValues.amount)
 
-  const newCheck = await CheckModel.create({ amount, userId: user.id })
+  const newCheck = await CheckModel.create({ amount, userId: authUser.id })
 
-  const incomeAmount = newCheck.amount * 0.6
-  const savingsAmount = newCheck.amount * 0.1
-  const otherAmount = newCheck.amount * 0.3
+  const user = await UserModel.findById(authUser.id)
+
+  const incomeAmount =
+    newCheck.amount * (user.checkDepositBreakdown.income / 100)
+  const savingsAmount =
+    newCheck.amount * (user.checkDepositBreakdown.savings / 100)
+  const otherAmount = newCheck.amount * (user.checkDepositBreakdown.other / 100)
 
   const expenses: Array<
     Pick<Expense, 'type' | 'amount' | 'description' | 'userId' | 'checkId'>
@@ -79,21 +98,21 @@ export const depositCheck = async (values: unknown) => {
       type: 'income',
       amount: incomeAmount,
       description: `Check deposit ${newCheck.id}`,
-      userId: user.id as unknown as ObjectId,
+      userId: authUser.id as unknown as ObjectId,
       checkId: newCheck.id,
     },
     {
       type: 'savings',
       amount: savingsAmount,
       description: `Check deposit ${newCheck.id}`,
-      userId: user.id as unknown as ObjectId,
+      userId: authUser.id as unknown as ObjectId,
       checkId: newCheck.id,
     },
     {
       type: 'other',
       amount: otherAmount,
       description: `Check deposit ${newCheck.id}`,
-      userId: user.id as unknown as ObjectId,
+      userId: authUser.id as unknown as ObjectId,
       checkId: newCheck.id,
     },
   ]
