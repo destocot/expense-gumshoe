@@ -29,13 +29,9 @@ export const UpdateDepositCheckBreakdownSchema = v.pipe(
       numberBetween0And100,
     ]),
   }),
-  v.forward(
-    v.partialCheck(
-      [['income'], ['savings'], ['other']],
-      (input) => input.income + input.savings + input.other === 100,
-      'The sum of income, savings, and other must equal 100.',
-    ),
-    ['other'],
+  v.check(
+    (input) => input.income + input.savings + input.other === 100,
+    'The sum of income, savings, and other must equal 100.',
   ),
 )
 

@@ -29,7 +29,6 @@ export default async function DashboardPage() {
   )
 
   const user = await UserModel.findById(authUser.id)
-  console.log(user)
   return (
     <main>
       <div className='flex flex-col gap-y-6 py-16'>
