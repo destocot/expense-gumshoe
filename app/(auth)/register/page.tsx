@@ -1,4 +1,4 @@
-import Brand from '@/components/brand'
+import { Brand } from '@/components/brand'
 import { buttonVariants } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'

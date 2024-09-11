@@ -1,4 +1,4 @@
-import Brand from '@/components/brand'
+import { Brand } from '@/components/brand'
 import { validateRequest } from '@/lib/validate-request'
 import { redirect } from 'next/navigation'
 import { ExpenseBarChart } from './_components/expense-bar-chart'
@@ -10,6 +10,7 @@ import { Expense } from '@/models/Expense'
 import { formatMoney } from '@/lib/utils'
 import UserModel from '@/models/User'
 import { SettingsButton } from './_components/settings-button'
+import CheckModel, { Check } from '@/models/Check'
 
 export default async function DashboardPage() {
   const { user: authUser } = await validateRequest()
@@ -27,6 +28,8 @@ export default async function DashboardPage() {
     },
     { income: 0, savings: 0, other: 0, expenses: 0 },
   )
+
+  const checks: Array<Check> = await CheckModel.find({ userId: authUser.id })
 
   const user = await UserModel.findById(authUser.id)
   return (
@@ -83,6 +86,33 @@ export default async function DashboardPage() {
             </span>
           </div>
         </div>
+        <h2 className='text-2xl font-bold tracking-tight'>Checks</h2>
+        <div className='flex flex-col gap-y-2'>
+          {checks.map((check) => (
+            <div
+              key={check._id.toString()}
+              className='flex items-center rounded bg-secondary px-2 py-4'
+            >
+              <div className='flex w-full flex-col gap-y-2'>
+                <span className='self-end text-xs opacity-50'>
+                  #{check._id.toString()}
+                </span>
+                <div className='flex items-end justify-between'>
+                  <span className='rounded bg-background px-0.5 text-sm font-medium'>
+                    {formatMoney(check.amount)}
+                  </span>
+                  <span className='text-xs opacity-50'>
+                    {new Date(check.createdAt).toLocaleDateString()}
+                  </span>
+                  <Link href={`/c/${check._id.toString()}`}>
+                    <Button variant='link'>View</Button>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
         <div className='rounded border'>
           <ExpenseBarChart expenses={expenses} />
         </div>

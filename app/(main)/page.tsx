@@ -1,4 +1,4 @@
-import Brand from '@/components/brand'
+import { Brand } from '@/components/brand'
 import CreateExpenseForm from '@/components/create-expense-form'
 import { DepositCheckButton } from '@/components/deposit-check-form'
 import ExpenseList from '@/components/expense-list'

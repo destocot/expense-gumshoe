@@ -1,10 +1,17 @@
 'use client'
 
-import { formatMoney } from '@/lib/utils'
+import { cn, formatMoney } from '@/lib/utils'
 import type { Expense } from '@/models/Expense'
-import { MinusCircleIcon, PlusCircleIcon } from 'lucide-react'
+import {
+  InfoIcon,
+  MinusCircleIcon,
+  PlusCircleIcon,
+  Trash2Icon,
+} from 'lucide-react'
 import { DeleteExpenseButton } from '@/components/delete-expense-button'
 import { UpdateExpenseButton } from './update-expense-button'
+import { Button, buttonVariants } from './ui/button'
+import Link from 'next/link'
 
 type ExpenseItemProps = { expense: Expense }
 
@@ -15,7 +22,7 @@ export const ExpenseItem = ({ expense }: ExpenseItemProps) => {
     <li className='group bg-background'>
       <div className='flex justify-between rounded p-1.5'>
         <div>
-          <span className='text-sm'>{expense.description}</span>
+          <span className='truncate text-sm'>{expense.description}</span>
 
           <div className='flex items-center gap-x-2'>
             <ExpenseIcon type={expense.type} />
@@ -27,10 +34,24 @@ export const ExpenseItem = ({ expense }: ExpenseItemProps) => {
           {new Date(expense.createdAt).toLocaleDateString()}
         </span>
 
-        <div className='hidden gap-x-1.5 group-hover:flex'>
-          <UpdateExpenseButton expense={expense} className='px-1.5' />
-          <DeleteExpenseButton expenseId={expenseId} className='px-1.5' />
-        </div>
+        {expense.checkId ? (
+          <div className='hidden gap-x-1.5 group-hover:flex'>
+            <Link
+              href={`/c/${expense.checkId}`}
+              className={cn(buttonVariants(), 'h-full px-1.5')}
+            >
+              <InfoIcon />
+            </Link>
+            <Button className='h-full px-1.5' variant='secondary'>
+              <Trash2Icon />
+            </Button>
+          </div>
+        ) : (
+          <div className='hidden gap-x-1.5 group-hover:flex'>
+            <UpdateExpenseButton expense={expense} className='px-1.5' />
+            <DeleteExpenseButton expenseId={expenseId} className='px-1.5' />
+          </div>
+        )}
       </div>
     </li>
   )

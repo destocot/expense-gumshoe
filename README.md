@@ -1,6 +1,6 @@
 # Feature Releases
 
-## September
+## V1
 
 ### V1.1
 
@@ -17,3 +17,10 @@
 - mobile responsive dialog components
 
 ### V1.3
+
+- deposit check form
+- dashboard settings
+- adjust deposit check separations
+- individual check pages
+
+### V1.4
