@@ -2,62 +2,12 @@
 
 import ExpenseModel, { Expense } from '@/models/Expense'
 import { revalidatePath } from 'next/cache'
-import { lucia } from '@/lib/auth'
-import { cookies } from 'next/headers'
-import { redirect } from 'next/navigation'
 import { validateRequest } from './validate-request'
 import * as v from 'valibot'
-import { CreateExpenseSchema } from '@/validators/create-expense.validator'
-import { UpdateExpenseSchema } from '@/validators/update-expense.validator'
 import { DepositCheckSchema } from '@/validators/deposit-check.validator'
 import CheckModel from '@/models/Check'
 import { UpdateDepositCheckBreakdownSchema } from '@/validators/update-deposit-check-breakdown.validator'
 import UserModel from '@/models/User'
-
-export const createExpense = async (values: unknown) => {
-  const { user } = await validateRequest()
-  if (!user) throw new Error('Unauthorized')
-
-  const parsedValues = v.parse(CreateExpenseSchema, values)
-
-  await ExpenseModel.create({ ...parsedValues, userId: user.id })
-  revalidatePath('/')
-}
-
-export const updateExpense = async (values: unknown) => {
-  const { user } = await validateRequest()
-  if (!user) throw new Error('Unauthorized')
-
-  const parsedValues = v.parse(UpdateExpenseSchema, values)
-
-  await ExpenseModel.findByIdAndUpdate(parsedValues._id, {
-    ...parsedValues,
-    userId: user.id,
-  })
-  revalidatePath('/')
-}
-
-export const deleteExpense = async ({ id }: { id: string }) => {
-  await ExpenseModel.findByIdAndDelete(id)
-  revalidatePath('/')
-}
-
-export const logoutUser = async () => {
-  const { session } = await validateRequest()
-
-  if (!session) throw new Error('Unauthorized')
-
-  await lucia.invalidateSession(session.id)
-
-  const sessionCookie = lucia.createBlankSessionCookie()
-  cookies().set(
-    sessionCookie.name,
-    sessionCookie.value,
-    sessionCookie.attributes,
-  )
-
-  redirect('/login')
-}
 
 export const updateDepositCheckBreakdown = async (values: unknown) => {
   const { user } = await validateRequest()

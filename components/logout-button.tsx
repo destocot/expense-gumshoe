@@ -1,11 +1,11 @@
 'use client'
 
-import { logoutUser } from '@/lib/actions'
+import { logout } from '@/actions/logout.action'
 import { Button } from './ui/button'
 
 export const LogoutButton = () => {
   const handleClick = async () => {
-    await logoutUser()
+    await logout()
   }
 
   return (

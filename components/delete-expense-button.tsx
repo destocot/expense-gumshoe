@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { deleteExpense } from '@/lib/actions'
+import { deleteExpense } from '@/actions/delete-expense.action'
 import { cn } from '@/lib/utils'
 import { Trash2Icon } from 'lucide-react'
 import {
@@ -40,7 +40,7 @@ export const DeleteExpenseButton = ({
             className='flex-1'
             variant='destructive'
             onClick={async () => {
-              await deleteExpense({ id: expenseId })
+              await deleteExpense(expenseId)
             }}
           >
             Yes

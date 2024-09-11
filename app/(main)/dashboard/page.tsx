@@ -4,12 +4,13 @@ import { redirect } from 'next/navigation'
 import { ExpenseBarChart } from './_components/expense-bar-chart'
 import Link from 'next/link'
 import { Button, buttonVariants } from '@/components/ui/button'
-import { HomeIcon } from 'lucide-react'
+import { HomeIcon, InfoIcon } from 'lucide-react'
 import { findExpenses } from '@/queries/expenses.queries'
-import { formatMoney } from '@/lib/utils'
+import { cn, formatMoney } from '@/lib/utils'
 import UserModel from '@/models/User'
 import { SettingsButton } from './_components/settings-button'
 import CheckModel, { Check } from '@/models/Check'
+import { CheckCard } from '@/components/check-card'
 
 export default async function DashboardPage() {
   const { user: authUser } = await validateRequest()
@@ -84,26 +85,17 @@ export default async function DashboardPage() {
         <h2 className='text-2xl font-bold tracking-tight'>Checks</h2>
         <div className='flex flex-col gap-y-2'>
           {checks.map((check) => (
-            <div
-              key={check._id.toString()}
-              className='flex items-center rounded bg-secondary px-2 py-4'
-            >
-              <div className='flex w-full flex-col gap-y-2'>
-                <span className='self-end text-xs opacity-50'>
-                  #{check._id.toString()}
-                </span>
-                <div className='flex items-end justify-between'>
-                  <span className='rounded bg-background px-0.5 text-sm font-medium'>
-                    {formatMoney(check.amount)}
-                  </span>
-                  <span className='text-xs opacity-50'>
-                    {new Date(check.createdAt).toLocaleDateString()}
-                  </span>
-                  <Link href={`/c/${check._id.toString()}`}>
-                    <Button variant='link'>View</Button>
-                  </Link>
-                </div>
-              </div>
+            <div key={check._id} className='relative'>
+              <CheckCard check={check} />
+              <Link
+                href={`/c/${check._id}`}
+                className={cn(
+                  buttonVariants({ size: 'icon', variant: 'ghost' }),
+                  'absolute -right-2 -top-2 size-6 transition hover:scale-110',
+                )}
+              >
+                <InfoIcon />
+              </Link>
             </div>
           ))}
         </div>

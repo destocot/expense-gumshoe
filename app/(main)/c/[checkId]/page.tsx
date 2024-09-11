@@ -1,4 +1,5 @@
 import { BrandWithHomeLink } from '@/components/brand'
+import { CheckCard } from '@/components/check-card'
 import { formatMoney } from '@/lib/utils'
 import { validateRequest } from '@/lib/validate-request'
 import { findCheckByCheckId } from '@/queries/check.queries'
@@ -20,21 +21,7 @@ const CheckPage = async (props: CheckPageProps) => {
     <main>
       <div className='flex flex-col gap-y-4 py-16'>
         <BrandWithHomeLink />
-
-        <div className='mt-4 flex flex-col gap-y-8 rounded bg-background/80 px-3 py-6 shadow'>
-          <div className='flex justify-between text-sm opacity-50'>
-            <span>{authUser.username}</span>
-            <span>#{check._id}</span>
-          </div>
-          <div className='flex items-end justify-between'>
-            <span className='rounded bg-success px-0.5 font-medium'>
-              {formatMoney(check.amount)}
-            </span>
-            <span className='text-sm opacity-50'>
-              {new Date(check.createdAt).toLocaleDateString()}
-            </span>
-          </div>
-        </div>
+        <CheckCard check={check} name={authUser.username} />
       </div>
     </main>
   )

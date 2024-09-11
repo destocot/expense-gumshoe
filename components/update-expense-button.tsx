@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { updateExpense } from '@/lib/actions'
+import { updateExpense } from '@/actions/update-expense.action'
 import { cn } from '@/lib/utils'
 import { PencilIcon } from 'lucide-react'
 import {
@@ -27,8 +27,7 @@ import {
 import { useForm } from 'react-hook-form'
 import { valibotResolver } from '@hookform/resolvers/valibot'
 import { DollarSignIcon } from 'lucide-react'
-import { RadioGroup, RadioGroupItem } from './ui/radio-group'
-import { TYPES } from '@/lib/constants'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import {
   UpdateExpenseInput,
   UpdateExpenseSchema,

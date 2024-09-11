@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { createExpense } from '@/lib/actions'
+import { createExpense } from '@/actions/create-expense.action'
 import { Input } from '@/components/ui/input'
 import {
   Form,
