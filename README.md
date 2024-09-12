@@ -24,3 +24,6 @@
 - individual check pages
 
 ### V1.4
+
+- associate expenses with checks
+- cascade delete expenses with checks

@@ -19,3 +19,16 @@ export const findExpenses = async (): Promise<Array<Expense>> => {
 
   return expenses
 }
+
+export const findExpensesByCheckId = async (checkId: string) => {
+  const { user: authUser } = await validateRequest()
+  if (!authUser) redirect('/login')
+
+  await dbConnect()
+
+  const expenseDocs = await ExpenseModel.find({ checkId, userId: authUser.id })
+
+  const expenses: Array<Expense> = expenseDocs.map((doc) => doc.toJSON())
+
+  return expenses
+}

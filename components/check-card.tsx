@@ -23,11 +23,11 @@ export const CheckCard = ({ className, check, name, ...props }: CardProps) => {
         </CardTitle>
       </CardHeader>
       <CardContent className='flex justify-between gap-x-4'>
-        <div className='flex max-w-80 flex-1 flex-col'>
+        <div className='flex flex-1 flex-col'>
           {name ? <span>{name}</span> : <span className='h-full' />}
           <div className='h-0.5 bg-muted' />
         </div>
-        <div className='flex items-center gap-x-0.5'>
+        <div className='flex w-[calc(20%-1rem)] items-center gap-x-0.5'>
           <span>$</span>
           <span className='rounded bg-success p-0.5 text-success-foreground'>
             {formatMoney(check.amount).slice(1)}
@@ -36,7 +36,7 @@ export const CheckCard = ({ className, check, name, ...props }: CardProps) => {
       </CardContent>
       <CardFooter className='flex-col items-start'>
         <span className='text-sm opacity-50'># {check._id}</span>
-        <div className='h-0.5 w-3/4 bg-muted' />
+        <div className='h-0.5 w-4/5 bg-muted' />
       </CardFooter>
     </Card>
   )

@@ -36,20 +36,16 @@ import { Dispatch, SetStateAction, useState } from 'react'
 
 type UpdateExpenseButtonProps = {
   expense: Expense
-  className?: string
 }
 
-export const UpdateExpenseButton = ({
-  expense,
-  className,
-}: UpdateExpenseButtonProps) => {
+export const UpdateExpenseButton = ({ expense }: UpdateExpenseButtonProps) => {
   const [open, setOpen] = useState(false)
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className={cn('h-full w-full', className)}>
-          <PencilIcon />
+        <Button size='icon'>
+          <PencilIcon size={18} />
         </Button>
       </DialogTrigger>
 
