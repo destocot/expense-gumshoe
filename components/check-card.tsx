@@ -7,11 +7,11 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import type { Check } from '@/models/Check'
-import type { User } from '@/models/User'
+import Link from 'next/link'
 
 type CardProps = React.ComponentProps<typeof Card> & {
   check: Check
-  name?: User['username']
+  name?: string
 }
 
 export const CheckCard = ({ className, check, name, ...props }: CardProps) => {
@@ -27,7 +27,7 @@ export const CheckCard = ({ className, check, name, ...props }: CardProps) => {
           {name ? <span>{name}</span> : <span className='h-full' />}
           <div className='h-0.5 bg-muted' />
         </div>
-        <div className='flex w-[calc(20%-1rem)] items-center gap-x-0.5'>
+        <div className='flex items-center gap-x-0.5'>
           <span>$</span>
           <span className='rounded bg-success p-0.5 text-success-foreground'>
             {formatMoney(check.amount).slice(1)}
@@ -35,8 +35,13 @@ export const CheckCard = ({ className, check, name, ...props }: CardProps) => {
         </div>
       </CardContent>
       <CardFooter className='flex-col items-start'>
-        <span className='text-sm opacity-50'># {check._id}</span>
-        <div className='h-0.5 w-4/5 bg-muted' />
+        <Link
+          className='text-sm opacity-50 transition hover:underline'
+          href={`/c/${check._id}`}
+        >
+          # {check._id}
+        </Link>
+        <div className='h-0.5 bg-muted' />
       </CardFooter>
     </Card>
   )

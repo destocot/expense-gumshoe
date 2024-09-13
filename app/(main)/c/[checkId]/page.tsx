@@ -2,7 +2,7 @@ import { BrandWithHomeLink } from '@/components/brand'
 import { CheckCard } from '@/components/check-card'
 import { ExpenseItem } from '@/components/expense-item'
 import { validateRequest } from '@/lib/validate-request'
-import { findCheckByCheckId } from '@/queries/check.queries'
+import { findCheck } from '@/queries/check.queries'
 import { findExpensesByCheckId } from '@/queries/expenses.queries'
 import { notFound, redirect } from 'next/navigation'
 
@@ -15,7 +15,7 @@ const CheckPage = async (props: CheckPageProps) => {
   const { user: authUser } = await validateRequest()
   if (!authUser) redirect('/login')
 
-  const check = await findCheckByCheckId(checkId)
+  const check = await findCheck(checkId)
   if (!check) notFound()
 
   const expenses = await findExpensesByCheckId(checkId)
