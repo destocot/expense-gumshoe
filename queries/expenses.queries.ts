@@ -48,6 +48,38 @@ export const findExpenses = async (options?: {
   return expenses
 }
 
+export const calcExpenseBalance = async () => {
+  const { user: authUser } = await validateRequest()
+  if (!authUser) redirect('/login')
+
+  await dbConnect()
+
+  return ExpenseModel.aggregate([
+    {
+      $match: { userId: authUser.id },
+    },
+    {
+      $group: {
+        _id: null,
+        total: {
+          $sum: {
+            $switch: {
+              branches: [
+                { case: { $eq: ['$type', 'income'] }, then: '$amount' },
+                {
+                  case: { $eq: ['$type', 'expense'] },
+                  then: { $subtract: [0, '$amount'] },
+                },
+              ],
+              default: 0,
+            },
+          },
+        },
+      },
+    },
+  ]).then((res) => res[0]?.total ?? 0)
+}
+
 export const findExpensesByCheckId = async (checkId: string) => {
   const { user: authUser } = await validateRequest()
   if (!authUser) redirect('/login')
@@ -55,7 +87,6 @@ export const findExpensesByCheckId = async (checkId: string) => {
   await dbConnect()
 
   const expenseDocs = await ExpenseModel.find({ checkId, userId: authUser.id })
-
   const expenses: Array<Expense> = expenseDocs.map((doc) => doc.toJSON())
 
   return expenses

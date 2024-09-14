@@ -2,31 +2,34 @@ import { Brand } from '@/components/brand'
 import CreateExpenseForm from '@/components/create-expense-form'
 import { DepositCheckButton } from '@/components/deposit-check-form'
 import ExpenseList from '@/components/expense-list'
+import { TimeSelector } from '@/components/time-selector'
+import { Button } from '@/components/ui/button'
 import { cn, formatMoney } from '@/lib/utils'
 import { validateRequest } from '@/lib/validate-request'
-import { findExpenses } from '@/queries/expenses.queries'
+import { calcExpenseBalance, findExpenses } from '@/queries/expenses.queries'
 
-const HomePage = async () => {
+type HomePageProps = {
+  searchParams: { t?: 'day' | 'week' | 'month' }
+}
+
+const HomePage = async ({ searchParams }: HomePageProps) => {
+  const time = searchParams?.t ?? 'week'
+
   const { user: authUser } = await validateRequest()
 
   return (
     <main>
       <div className='flex flex-col gap-y-4 py-16'>
         <Brand />
-        {!!authUser ? <SignedIn /> : <SignedOut />}
+        {!!authUser ? <SignedIn time={time} /> : <SignedOut />}
       </div>
     </main>
   )
 }
 
-const SignedIn = async () => {
-  const expenses = await findExpenses()
-
-  const total = expenses.reduce((acc, expense) => {
-    if (expense.type === 'income') return acc + expense.amount
-    else if (expense.type === 'expense') return acc - expense.amount
-    else return acc
-  }, 0)
+const SignedIn = async ({ time }: { time: 'day' | 'week' | 'month' }) => {
+  const expenses = await findExpenses({ time })
+  const total = await calcExpenseBalance()
 
   const slicedExpenses = expenses.slice(0, 8)
 
@@ -44,6 +47,8 @@ const SignedIn = async () => {
       <CreateExpenseForm />
 
       <DepositCheckButton />
+
+      <TimeSelector time={time} />
 
       <ExpenseList expenses={slicedExpenses} />
     </>

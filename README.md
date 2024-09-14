@@ -27,3 +27,9 @@
 
 - associate expenses with checks
 - cascade delete expenses with checks
+- associate icons with savings and other
+- style check card component
+
+### V1.5
+
+- seperate time by day, month, or year
