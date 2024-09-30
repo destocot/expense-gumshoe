@@ -80,9 +80,10 @@ export const getExpenseBalance = async () => {
         )`,
     })
     .from(expenses)
+    .where(eq(expenses.userId, session.user.userId))
     .then((res) => res[0]?.total ?? 0)
 }
-
+//c
 export const findOneExpenseByCheckId = async (
   checkId: SelectCheck['checkId'],
 ): Promise<Array<SelectExpense>> => {
