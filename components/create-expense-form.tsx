@@ -60,7 +60,11 @@ const CreateExpenseForm = () => {
               </FormItem>
             )}
           />
-          <Button type='submit' size='icon'>
+          <Button
+            type='submit'
+            disabled={form.formState.isSubmitting}
+            size='icon'
+          >
             <Plus />
           </Button>
         </div>

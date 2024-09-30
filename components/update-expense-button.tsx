@@ -204,7 +204,11 @@ const UpdateExpenseForm = ({
           <DialogClose className='flex-1' asChild>
             <Button variant='ghost'>Cancel</Button>
           </DialogClose>
-          <Button type='submit' className='flex-1'>
+          <Button
+            type='submit'
+            disabled={form.formState.isSubmitting}
+            className='flex-1'
+          >
             Update
           </Button>
         </DialogFooter>

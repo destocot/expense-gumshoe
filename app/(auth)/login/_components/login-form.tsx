@@ -58,7 +58,9 @@ export const LoginForm = () => {
           )}
         />
 
-        <Button type='submit'>Login</Button>
+        <Button type='submit' disabled={form.formState.isSubmitting}>
+          Login
+        </Button>
       </form>
     </Form>
   )

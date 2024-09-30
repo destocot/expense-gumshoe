@@ -75,7 +75,9 @@ export const RegisterForm = () => {
           )}
         />
 
-        <Button type='submit'>Register </Button>
+        <Button type='submit' disabled={form.formState.isSubmitting}>
+          Register
+        </Button>
       </form>
     </Form>
   )
