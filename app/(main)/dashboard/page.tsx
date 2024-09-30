@@ -16,6 +16,9 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel'
+import { Button } from '@/components/ui/button'
+import Link from 'next/link'
+import { HomeIcon } from 'lucide-react'
 
 export default async function DashboardPage() {
   const session = await auth()
@@ -35,8 +38,38 @@ export default async function DashboardPage() {
   )
 
   const checks = await findChecks()
-
   const user = await findOneUser(session.user.userId)
+
+  if (!expenses.length) {
+    return (
+      <div className='flex flex-col gap-y-6 py-16'>
+        <div className='flex'>
+          <BrandWithHomeLink>
+            <SettingsButton />
+          </BrandWithHomeLink>
+        </div>
+        <h2 className='text-2xl font-bold'>{user.username}'s Dashboard</h2>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className='text-center'>You Have No Expenses</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className='text-center'>
+              You have no expenses yet. Click the button below to add your first
+              expense.
+            </p>
+            <Button size='sm' className='mt-4 w-full' asChild>
+              <Link href='/'>
+                Home
+                <HomeIcon className='ml-2' size={20} />
+              </Link>
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    )
+  }
 
   return (
     <main>

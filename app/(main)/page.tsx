@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button'
 import { cn, formatMoney } from '@/lib/utils'
 import { findAllExpenses, getExpenseBalance } from '@/queries/expenses-queries'
 import { ArrowRightIcon } from 'lucide-react'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 type HomePageProps = {
   searchParams: { t?: 'day' | 'week' | 'month' }
@@ -60,12 +61,33 @@ const SignedInContent = async ({
       >
         {formatMoney(total)}
       </h1>
+
       <CreateExpenseForm />
+
       <div className='flex gap-x-4'>
         <DepositCheckButton />
         <TimeSelector time={time} />
       </div>
-      <ExpenseList expenses={expenses} />
+
+      {expenses.length > 0 ? (
+        <ExpenseList expenses={expenses} />
+      ) : (
+        <Card>
+          <CardContent>
+            <CardHeader>
+              <CardTitle className='text-center'>
+                You Have No Expenses
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className='text-center'>
+                You have no expenses yet. Fill out the form above to add your
+                first expense.
+              </p>
+            </CardContent>
+          </CardContent>
+        </Card>
+      )}
     </>
   )
 }
