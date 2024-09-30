@@ -1,10 +1,12 @@
 'use server'
 
-import ExpenseModel from '@/models/Expense'
-import type { Expense } from '@/models/Expense'
+import { db } from '@/drizzle'
+import { expenses, SelectExpense } from '@/drizzle/schema'
+import { eq } from 'drizzle-orm'
 import { revalidatePath } from 'next/cache'
 
-export const deleteExpense = async (expenseId: Expense['_id']) => {
-  await ExpenseModel.findByIdAndDelete(expenseId)
+export const deleteExpense = async (expenseId: SelectExpense['expenseId']) => {
+  await db.delete(expenses).where(eq(expenses.expenseId, expenseId))
+
   revalidatePath('/')
 }

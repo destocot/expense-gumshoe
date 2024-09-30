@@ -6,6 +6,7 @@ import {
   text,
   uniqueIndex,
 } from 'drizzle-orm/sqlite-core'
+import { createId } from '@paralleldrive/cuid2'
 
 export function lower(username: AnySQLiteColumn): SQL {
   return sql`lower(${username})`
@@ -16,7 +17,7 @@ export const users = sqliteTable(
   {
     userId: text('user_id')
       .primaryKey()
-      .$defaultFn(() => crypto.randomUUID()),
+      .$defaultFn(() => createId()),
     createdAt: text('created_at')
       .notNull()
       .default(sql`(CURRENT_TIMESTAMP)`),
@@ -40,10 +41,10 @@ export const users = sqliteTable(
   }),
 )
 
-export const expenses = sqliteTable('expense', {
+export const expenses = sqliteTable('expenses', {
   expenseId: text('expense_id')
     .primaryKey()
-    .$defaultFn(() => crypto.randomUUID()),
+    .$defaultFn(() => createId()),
   createdAt: text('created_at')
     .notNull()
     .default(sql`(CURRENT_TIMESTAMP)`),
@@ -59,12 +60,43 @@ export const expenses = sqliteTable('expense', {
   userId: text('user_id')
     .notNull()
     .references(() => users.userId, { onDelete: 'cascade' }),
+  checkId: text('check_id').references(() => checks.checkId, {
+    onDelete: 'set null',
+    onUpdate: 'cascade',
+  }),
+})
+
+export const checks = sqliteTable('checks', {
+  checkId: text('check_id')
+    .primaryKey()
+    .$defaultFn(() => createId()),
+  createdAt: text('created_at')
+    .notNull()
+    .default(sql`(CURRENT_TIMESTAMP)`),
+  updatedAt: text('updated_at')
+    .notNull()
+    .default(sql`(CURRENT_TIMESTAMP)`)
+    .$onUpdate(() => sql`(CURRENT_TIMESTAMP)`),
+  amount: integer('amount').notNull(),
+  userId: text('user_id')
+    .notNull()
+    .references(() => users.userId, { onDelete: 'cascade' }),
 })
 
 /* relations */
 
 export const usersRelations = relations(users, ({ many }) => ({
   expenses: many(expenses),
+  checks: many(checks),
+}))
+
+export const expensesRelations = relations(expenses, ({ one }) => ({
+  user: one(users),
+  check: one(checks),
+}))
+
+export const checksRelations = relations(checks, ({ one }) => ({
+  user: one(users),
 }))
 
 /* types */
@@ -74,3 +106,6 @@ export type SelectUser = typeof users.$inferSelect
 
 export type InferExpense = typeof expenses.$inferInsert
 export type SelectExpense = typeof expenses.$inferSelect
+
+export type InferCheck = typeof checks.$inferInsert
+export type SelectCheck = typeof checks.$inferSelect

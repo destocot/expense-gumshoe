@@ -6,11 +6,11 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import type { Check } from '@/models/Check'
 import Link from 'next/link'
+import { SelectCheck } from '@/drizzle/schema'
 
 type CardProps = React.ComponentProps<typeof Card> & {
-  check: Check
+  check: SelectCheck
   name?: string
 }
 
@@ -37,9 +37,9 @@ export const CheckCard = ({ className, check, name, ...props }: CardProps) => {
       <CardFooter className='flex-col items-start'>
         <Link
           className='text-sm opacity-50 transition hover:underline'
-          href={`/c/${check._id}`}
+          href={`/c/${check.checkId}`}
         >
-          # {check._id}
+          # {check.checkId}
         </Link>
         <div className='h-0.5 bg-muted' />
       </CardFooter>

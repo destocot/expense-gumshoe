@@ -1,11 +1,9 @@
 'use client'
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
-import { Button } from './ui/button'
+import { Button } from '@/components/ui/button'
 
-type TimeSelectorProps = {
-  time?: 'day' | 'week' | 'month'
-}
+type TimeSelectorProps = { time?: 'day' | 'week' | 'month' }
 
 export const TimeSelector = ({ time }: TimeSelectorProps) => {
   time = time || 'week'
@@ -20,10 +18,11 @@ export const TimeSelector = ({ time }: TimeSelectorProps) => {
   }
 
   return (
-    <div className='grid grid-cols-3 divide-x'>
+    <div className='grid w-full grid-cols-3 divide-x overflow-hidden rounded'>
       <Button
         size='sm'
-        className='rounded-r-none uppercase'
+        variant='ghost'
+        className='rounded-none uppercase'
         disabled={time === 'day'}
         onClick={() => handleClick('day')}
       >
@@ -31,7 +30,8 @@ export const TimeSelector = ({ time }: TimeSelectorProps) => {
       </Button>
       <Button
         size='sm'
-        className='rounded-l-none rounded-r-none uppercase'
+        variant='ghost'
+        className='rounded-none uppercase'
         disabled={time === 'week'}
         onClick={() => handleClick('week')}
       >
@@ -39,7 +39,8 @@ export const TimeSelector = ({ time }: TimeSelectorProps) => {
       </Button>
       <Button
         size='sm'
-        className='rounded-l-none uppercase'
+        variant='ghost'
+        className='rounded-none uppercase'
         disabled={time === 'month'}
         onClick={() => handleClick('month')}
       >

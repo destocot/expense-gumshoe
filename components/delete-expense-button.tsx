@@ -23,7 +23,7 @@ export const DeleteExpenseButton = ({
     <Dialog>
       <DialogTrigger asChild>
         <Button variant='destructive' size='icon'>
-          <Trash2Icon size={18} />
+          <Trash2Icon size={20} />
         </Button>
       </DialogTrigger>
 

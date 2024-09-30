@@ -1,5 +1,8 @@
 'use client'
 
+import { SaveIcon, Settings2Icon } from 'lucide-react'
+import { Dispatch, SetStateAction, useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -25,12 +28,12 @@ import {
   UpdateDepositCheckBreakdownSchema,
 } from '@/validators/update-deposit-check-breakdown.validator'
 import { valibotResolver } from '@hookform/resolvers/valibot'
-import { SaveIcon, Settings2Icon } from 'lucide-react'
-import { useForm } from 'react-hook-form'
 
 export const SettingsButton = () => {
+  const [open, setOpen] = useState(false)
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button size='icon' className='size-8'>
           <Settings2Icon />
@@ -43,7 +46,7 @@ export const SettingsButton = () => {
           <DialogDescription>Here you can edit your settings</DialogDescription>
         </DialogHeader>
 
-        <DepositCheckBreakdownForm />
+        <DepositCheckBreakdownForm setOpen={setOpen} />
 
         <DialogFooter>
           <DialogClose asChild>
@@ -55,7 +58,11 @@ export const SettingsButton = () => {
   )
 }
 
-export const DepositCheckBreakdownForm = () => {
+export const DepositCheckBreakdownForm = ({
+  setOpen,
+}: {
+  setOpen: Dispatch<SetStateAction<boolean>>
+}) => {
   const form = useForm<UpdateDepositCheckBreakdownInput>({
     resolver: valibotResolver(UpdateDepositCheckBreakdownSchema),
     defaultValues: { income: 60, savings: 10, other: 30 },
@@ -63,6 +70,7 @@ export const DepositCheckBreakdownForm = () => {
 
   const submit = async (values: UpdateDepositCheckBreakdownInput) => {
     await updateDepositCheckBreakdown(values)
+    setOpen(false)
   }
 
   return (

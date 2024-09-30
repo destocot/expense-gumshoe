@@ -1,13 +1,13 @@
 'use server'
 
-import ExpenseModel, { Expense } from '@/models/Expense'
 import { revalidatePath } from 'next/cache'
-import * as v from 'valibot'
+import { parse } from 'valibot'
+import { eq } from 'drizzle-orm'
 import { DepositCheckSchema } from '@/validators/deposit-check.validator'
-import CheckModel from '@/models/Check'
 import { UpdateDepositCheckBreakdownSchema } from '@/validators/update-deposit-check-breakdown.validator'
-// import UserModel from '@/models/User'
 import { auth } from '@/auth.config'
+import { db } from '@/drizzle'
+import { checks, expenses, InferExpense, users } from '@/drizzle/schema'
 
 export const updateDepositCheckBreakdown = async (values: unknown) => {
   const session = await auth()
@@ -15,11 +15,12 @@ export const updateDepositCheckBreakdown = async (values: unknown) => {
     throw new Error('Unauthorized')
   }
 
-  const parsedValues = v.parse(UpdateDepositCheckBreakdownSchema, values)
+  const parsedValues = parse(UpdateDepositCheckBreakdownSchema, values)
 
-  // await UserModel.findByIdAndUpdate(user.id, {
-  //   checkDepositBreakdown: parsedValues,
-  // })
+  await db
+    .update(users)
+    .set({ checkDepositBreakdown: parsedValues })
+    .where(eq(users.userId, session.user.userId))
 
   revalidatePath('/dashboard')
 }
@@ -30,46 +31,50 @@ export const depositCheck = async (values: unknown) => {
     throw new Error('Unauthorized')
   }
 
-  const parsedValues = v.parse(DepositCheckSchema, values)
+  const parsedValues = parse(DepositCheckSchema, values)
 
-  const amount = parseFloat(parsedValues.amount)
+  const amount = parsedValues.amount
 
-  // const newCheck = await CheckModel.create({ amount, userId: authUser.id })
+  const newCheck = await db
+    .insert(checks)
+    .values({
+      amount,
+      userId: session.user.userId,
+    })
+    .returning({ checkId: checks.checkId, amount: checks.amount })
+    .then((res) => res[0])
 
-  // const user = await UserModel.findById(authUser.id)
+  const { checkDepositBreakdown } = await db
+    .select({ checkDepositBreakdown: users.checkDepositBreakdown })
+    .from(users)
+    .where(eq(users.userId, session.user.userId))
+    .then((res) => res[0])
 
-  // const incomeAmount =
-  //   newCheck.amount * (user.checkDepositBreakdown.income / 100)
-  // const savingsAmount =
-  //   newCheck.amount * (user.checkDepositBreakdown.savings / 100)
-  // const otherAmount = newCheck.amount * (user.checkDepositBreakdown.other / 100)
+  const newExpenses: Array<InferExpense> = [
+    {
+      type: 'income',
+      amount: newCheck.amount * (checkDepositBreakdown.income / 100),
+      description: `Check deposit ${newCheck.checkId}`,
+      userId: session.user.userId,
+      checkId: newCheck.checkId,
+    },
+    {
+      type: 'savings',
+      amount: newCheck.amount * (checkDepositBreakdown.savings / 100),
+      description: `Check deposit ${newCheck.checkId}`,
+      userId: session.user.userId,
+      checkId: newCheck.checkId,
+    },
+    {
+      type: 'other',
+      amount: newCheck.amount * (checkDepositBreakdown.other / 100),
+      description: `Check deposit ${newCheck.checkId}`,
+      userId: session.user.userId,
+      checkId: newCheck.checkId,
+    },
+  ]
 
-  // const expenses: Array<
-  //   Pick<Expense, 'type' | 'amount' | 'description' | 'userId' | 'checkId'>
-  // > = [
-  //   {
-  //     type: 'income',
-  //     amount: incomeAmount,
-  //     description: `Check deposit ${newCheck.id}`,
-  //     userId: authUser.id,
-  //     checkId: newCheck.id,
-  //   },
-  //   {
-  //     type: 'savings',
-  //     amount: savingsAmount,
-  //     description: `Check deposit ${newCheck.id}`,
-  //     userId: authUser.id,
-  //     checkId: newCheck.id,
-  //   },
-  //   {
-  //     type: 'other',
-  //     amount: otherAmount,
-  //     description: `Check deposit ${newCheck.id}`,
-  //     userId: authUser.id,
-  //     checkId: newCheck.id,
-  //   },
-  // ]
+  await db.insert(expenses).values(newExpenses)
 
-  // await ExpenseModel.create(expenses)
   revalidatePath('/')
 }

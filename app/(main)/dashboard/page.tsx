@@ -1,14 +1,21 @@
 import { BrandWithHomeLink } from '@/components/brand'
 import { redirect } from 'next/navigation'
-// import { ExpenseBarChart } from './_components/expense-bar-chart'
+import { ExpenseBarChart } from './_components/expense-bar-chart'
 import { formatMoney } from '@/lib/utils'
-// import UserModel from '@/models/User'
 import { SettingsButton } from './_components/settings-button'
-// import { CheckCard } from '@/components/check-card'
-// import { findChecks } from '@/queries/check.queries'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { auth } from '@/auth.config'
-import { findAllExpenses } from '@/queries/expenses.queries'
+import { findAllExpenses } from '@/queries/expenses-queries'
+import { findChecks } from '@/queries/checks-queries'
+import { findOneUser } from '@/queries/users-queries'
+import { CheckCard } from '@/components/check-card'
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from '@/components/ui/carousel'
 
 export default async function DashboardPage() {
   const session = await auth()
@@ -27,9 +34,10 @@ export default async function DashboardPage() {
     { income: 0, savings: 0, other: 0, expenses: 0 },
   )
 
-  // const checks = await findChecks()
+  const checks = await findChecks()
 
-  // const user = await UserModel.findById(authUser.id)
+  const user = await findOneUser(session.user.userId)
+
   return (
     <main>
       <div className='flex flex-col gap-y-6 py-16'>
@@ -38,7 +46,7 @@ export default async function DashboardPage() {
             <SettingsButton />
           </BrandWithHomeLink>
         </div>
-        {/* <h2 className='text-2xl font-bold'>{authUser.username}'s Dashboard</h2> */}
+        <h2 className='text-2xl font-bold'>{user.username}'s Dashboard</h2>
         <Card>
           <CardContent className='grid pt-6 sm:grid-cols-2'>
             <div className='flex gap-x-2'>
@@ -66,22 +74,22 @@ export default async function DashboardPage() {
             </CardTitle>
           </CardHeader>
           <CardContent className='grid grid-cols-3 gap-x-2'>
-            <div className='flex flex-col items-center rounded bg-primary/10'>
+            <div className='flex flex-col items-center rounded bg-success/10'>
               <span>Income</span>
               <span className='text-xl tabular-nums'>
-                {/* {user.checkDepositBreakdown.income}% */}
+                {user.checkDepositBreakdown.income}%
               </span>
             </div>
-            <div className='flex flex-col items-center rounded bg-primary/10'>
+            <div className='flex flex-col items-center rounded bg-pink-500/10'>
               <span>Savings</span>
               <span className='text-xl tabular-nums'>
-                {/* {user.checkDepositBreakdown.savings}% */}
+                {user.checkDepositBreakdown.savings}%
               </span>
             </div>
             <div className='flex flex-col items-center rounded bg-primary/10'>
               <span>Other</span>
               <span className='text-xl tabular-nums'>
-                {/* {user.checkDepositBreakdown.other}% */}
+                {user.checkDepositBreakdown.other}%
               </span>
             </div>
           </CardContent>
@@ -89,16 +97,20 @@ export default async function DashboardPage() {
 
         <h2 className='text-2xl font-bold tracking-tight'>Checks</h2>
 
-        <ul className='flex flex-col gap-y-2'>
-          {/* {checks.map((check) => (
-            <li key={check._id}>
-              <CheckCard check={check} />
-            </li>
-          ))} */}
-        </ul>
+        <Carousel orientation='vertical'>
+          <CarouselContent className='-mt-1 h-[200px]'>
+            {checks.map((check) => (
+              <CarouselItem key={check.checkId}>
+                <CheckCard check={check} />
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          <CarouselPrevious />
+          <CarouselNext />
+        </Carousel>
 
-        <div className='rounded border'>
-          {/* <ExpenseBarChart expenses={expenses} /> */}
+        <div className='borderm mt-4 rounded'>
+          <ExpenseBarChart expenses={expenses} />
         </div>
       </div>
     </main>

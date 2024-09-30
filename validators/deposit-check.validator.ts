@@ -7,12 +7,12 @@ export const DepositCheckSchema = v.object({
       v.transform((i) => Number(i)),
       v.number(),
       v.minValue(0.01),
-      v.transform((i) => i.toFixed(2)),
+      v.transform((i) => Number(i.toFixed(2))),
     ),
     v.pipe(
       v.number(),
       v.minValue(0.01),
-      v.transform((i) => i.toFixed(2)),
+      v.transform((i) => Number(i.toFixed(2))),
     ),
   ]),
 })

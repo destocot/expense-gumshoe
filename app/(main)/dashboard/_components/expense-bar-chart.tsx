@@ -8,10 +8,9 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from '@/components/ui/chart'
-import { type Expense } from '@/models/Expense'
-import { Document } from 'mongoose'
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts'
 import { endOfWeek, format, isWithinInterval, startOfWeek } from 'date-fns'
+import { SelectExpense } from '@/drizzle/schema'
 
 const chartConfig = {
   createdAt: {
@@ -25,7 +24,7 @@ const chartConfig = {
 } satisfies ChartConfig
 
 type BarChartProps = {
-  expenses: Array<Omit<Expense, keyof Document<unknown, any, any>>>
+  expenses: Array<SelectExpense>
 }
 
 export const ExpenseBarChart = ({ expenses }: BarChartProps) => {

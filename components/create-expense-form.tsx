@@ -20,7 +20,7 @@ import { valibotResolver } from '@hookform/resolvers/valibot'
 import { DollarSignIcon, Plus } from 'lucide-react'
 import { RadioGroup, RadioGroupItem } from './ui/radio-group'
 import { TYPES } from '@/lib/constants'
-import { capitalize, cn } from '@/lib/utils'
+import { cn } from '@/lib/utils'
 
 const CreateExpenseForm = () => {
   const form = useForm<CreateExpenseInput>({
@@ -119,12 +119,12 @@ const CreateExpenseForm = () => {
                       return (
                         <FormItem
                           key={type}
-                          className='flex items-center space-x-3 space-y-0'
+                          className='flex items-center space-x-2 space-y-0'
                         >
                           <FormControl>
                             <RadioGroupItem value={type} />
                           </FormControl>
-                          <FormLabel>{capitalize(type)}</FormLabel>
+                          <FormLabel className='uppercase'>{type}</FormLabel>
                         </FormItem>
                       )
                     })}

@@ -8,7 +8,7 @@ export default function MainLayout({
   return (
     <>
       <Header />
-      <div className='container max-w-lg'>{children}</div>
+      <main className='container max-w-lg'>{children}</main>
     </>
   )
 }

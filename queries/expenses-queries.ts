@@ -1,8 +1,13 @@
 import 'server-only'
 
 import { db } from '@/drizzle'
-import { expenses, SelectExpense, type SelectUser } from '@/drizzle/schema'
-import { and, between, eq, sql } from 'drizzle-orm'
+import {
+  expenses,
+  SelectCheck,
+  SelectExpense,
+  type SelectUser,
+} from '@/drizzle/schema'
+import { and, between, desc, eq, sql } from 'drizzle-orm'
 import { auth } from '@/auth.config'
 
 export const findAllExpenses = async (
@@ -38,6 +43,7 @@ export const findAllExpenses = async (
     .select()
     .from(expenses)
     .where(and(...conditions))
+    .orderBy(desc(expenses.createdAt))
 }
 
 export const findOneExpense = async (
@@ -64,20 +70,32 @@ export const getExpenseBalance = async () => {
 
   return await db
     .select({
-      total: sql<number>`sum(case when ${expenses.type} = 'income' then ${expenses.amount} else -${expenses.amount} end)`,
+      total: sql<number>`
+        sum(
+          case 
+            when ${expenses.type} = 'income' then ${expenses.amount} 
+            when ${expenses.type} = 'expense' then -${expenses.amount}
+            else 0
+          end
+        )`,
     })
     .from(expenses)
     .then((res) => res[0]?.total ?? 0)
 }
 
-// export const findAllExpensesByCheckId = async (checkId: string) => {
-//   const { user: authUser } = await validateRequest()
-//   if (!authUser) redirect('/login')
+export const findOneExpenseByCheckId = async (
+  checkId: SelectCheck['checkId'],
+): Promise<Array<SelectExpense>> => {
+  const session = await auth()
+  if (!session?.user) throw new Error('Unauthorized')
 
-//   await dbConnect()
-
-//   const expenseDocs = await ExpenseModel.find({ checkId, userId: authUser.id })
-//   const expenses: Array<Expense> = expenseDocs.map((doc) => doc.toJSON())
-
-//   return expenses
-// }
+  return await db
+    .select()
+    .from(expenses)
+    .where(
+      and(
+        eq(expenses.checkId, checkId),
+        eq(expenses.userId, session.user.userId),
+      ),
+    )
+}

@@ -1,6 +1,5 @@
 'use client'
 
-import { formatMoney } from '@/lib/utils'
 import {
   CuboidIcon,
   InfoIcon,
@@ -8,13 +7,13 @@ import {
   PiggyBankIcon,
   PlusCircleIcon,
 } from 'lucide-react'
-import { DeleteExpenseButton } from '@/components/delete-expense-button'
-import { UpdateExpenseButton } from './update-expense-button'
-import { buttonVariants } from './ui/button'
 import Link from 'next/link'
+import { formatMoney } from '@/lib/utils'
+import { DeleteExpenseButton } from '@/components/delete-expense-button'
+import { UpdateExpenseButton } from '@/components/update-expense-button'
+import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { DeleteCheckButton } from './delete-check-button'
-import { SelectExpense } from '@/drizzle/schema'
+import { type SelectExpense } from '@/drizzle/schema'
 
 type ExpenseItemProps = { expense: SelectExpense }
 
@@ -34,30 +33,22 @@ export const ExpenseItem = ({ expense }: ExpenseItemProps) => {
         <div className='text-xs opacity-50 group-hover:hidden'>
           {new Date(expense.createdAt!).toLocaleDateString()}
         </div>
-        {/* {!!expense.checkId ? (
-          <div className='absolute bottom-2 right-2 hidden gap-x-1.5 group-hover:flex'>
-            <CheckLink checkId={expense.checkId} />
-            <DeleteCheckButton checkId={expense.checkId} />
-          </div>
-        ) : (
+        {!expense.checkId ? (
           <div className='absolute bottom-2 right-2 hidden gap-x-1.5 group-hover:flex'>
             <UpdateExpenseButton expense={expense} />
-            <DeleteExpenseButton expenseId={expense._id} />
+            <DeleteExpenseButton expenseId={expense.expenseId} />
           </div>
-        )} */}
+        ) : (
+          <div className='absolute bottom-2 right-2 hidden group-hover:block'>
+            <Button variant='secondary' size='icon' asChild>
+              <Link href={`/c/${expense.checkId}`}>
+                <InfoIcon size={20} />
+              </Link>
+            </Button>
+          </div>
+        )}
       </CardContent>
     </Card>
-  )
-}
-
-const CheckLink = ({ checkId }: { checkId: string }) => {
-  return (
-    <Link
-      className={buttonVariants({ variant: 'secondary', size: 'icon' })}
-      href={`/c/${checkId}`}
-    >
-      <InfoIcon size={18} />
-    </Link>
   )
 }
 
@@ -71,7 +62,5 @@ const ExpenseIcon = ({ type }: { type: SelectExpense['type'] }) => {
       return <PiggyBankIcon size={16} className='stroke-pink-500' />
     case 'other':
       return <CuboidIcon size={16} className='stroke-primary' />
-    default:
-      return null
   }
 }
