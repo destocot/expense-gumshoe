@@ -1,93 +1,83 @@
-import dbConnect from '@/lib/dbConnect'
-import { validateRequest } from '@/lib/validate-request'
-import ExpenseModel, { Expense } from '@/models/Expense'
-import { redirect } from 'next/navigation'
+import 'server-only'
 
-export const findExpenses = async (options?: {
-  time?: 'day' | 'week' | 'month'
-}): Promise<Array<Expense>> => {
-  const { user: authUser } = await validateRequest()
-  if (!authUser) redirect('/login')
+import { db } from '@/drizzle'
+import { expenses, SelectExpense, type SelectUser } from '@/drizzle/schema'
+import { and, between, eq, sql } from 'drizzle-orm'
+import { auth } from '@/auth.config'
 
-  const filter = { userId: authUser.id }
-
-  if (options?.time) {
-    const time = options.time
-
-    const now = new Date()
-    let startDate
-
-    switch (time.toLowerCase()) {
-      case 'day':
-        startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate())
-        break
-      case 'week':
-        startDate = new Date(
-          now.getFullYear(),
-          now.getMonth(),
-          now.getDate() - (now.getDay() || 7),
-        )
-        break
-      case 'month':
-        startDate = new Date(now.getFullYear(), now.getMonth(), 1)
-        break
-    }
-
-    // @ts-ignore
-    filter.createdAt = { $gte: startDate, $lt: now }
+export const findAllExpenses = async (
+  userId: SelectUser['userId'],
+  options: { time?: 'day' | 'week' | 'month' },
+): Promise<Array<SelectExpense>> => {
+  const session = await auth()
+  if (session?.user?.userId !== userId) {
+    throw new Error('Unauthorized')
   }
 
-  await dbConnect()
+  const conditions = [eq(expenses.userId, userId)]
 
-  const expenseDocs = await ExpenseModel.find(filter).sort({
-    createdAt: -1,
-  })
+  const time = options?.time
 
-  const expenses: Array<Expense> = expenseDocs.map((doc) => doc.toJSON())
+  if (time) {
+    let startDate = sql`date('now', 'weekday 0', '-7 days')`
+    let endDate = sql`date('now', 'weekday 0', '-1 days')`
+    if (time === 'day') {
+      startDate = sql`date('now', 'start of day')`
+      endDate = sql`date('now', 'start of day', '+1 day')`
+    }
 
-  return expenses
+    if (time === 'month') {
+      startDate = sql`date('now', 'start of month')`
+      endDate = sql`datetime('now', 'start of month', '+1 month', '-1 second')`
+    }
+
+    conditions.push(between(expenses.createdAt, startDate, endDate))
+  }
+
+  return await db
+    .select()
+    .from(expenses)
+    .where(and(...conditions))
 }
 
-export const calcExpenseBalance = async () => {
-  const { user: authUser } = await validateRequest()
-  if (!authUser) redirect('/login')
+export const findOneExpense = async (
+  userId: SelectUser['userId'],
+  expenseId: SelectExpense['expenseId'],
+): Promise<SelectExpense | null> => {
+  const session = await auth()
+  if (session?.user?.userId !== userId) {
+    throw new Error('Unauthorized')
+  }
 
-  await dbConnect()
-
-  return ExpenseModel.aggregate([
-    {
-      $match: { userId: authUser.id },
-    },
-    {
-      $group: {
-        _id: null,
-        total: {
-          $sum: {
-            $switch: {
-              branches: [
-                { case: { $eq: ['$type', 'income'] }, then: '$amount' },
-                {
-                  case: { $eq: ['$type', 'expense'] },
-                  then: { $subtract: [0, '$amount'] },
-                },
-              ],
-              default: 0,
-            },
-          },
-        },
-      },
-    },
-  ]).then((res) => res[0]?.total ?? 0)
+  return await db
+    .select()
+    .from(expenses)
+    .where(and(eq(expenses.userId, userId), eq(expenses.expenseId, expenseId)))
+    .then((res) => res[0] ?? null)
 }
 
-export const findExpensesByCheckId = async (checkId: string) => {
-  const { user: authUser } = await validateRequest()
-  if (!authUser) redirect('/login')
+export const getExpenseBalance = async () => {
+  const session = await auth()
+  if (!session?.user) {
+    throw new Error('Unauthorized')
+  }
 
-  await dbConnect()
-
-  const expenseDocs = await ExpenseModel.find({ checkId, userId: authUser.id })
-  const expenses: Array<Expense> = expenseDocs.map((doc) => doc.toJSON())
-
-  return expenses
+  return await db
+    .select({
+      total: sql<number>`sum(case when ${expenses.type} = 'income' then ${expenses.amount} else -${expenses.amount} end)`,
+    })
+    .from(expenses)
+    .then((res) => res[0]?.total ?? 0)
 }
+
+// export const findAllExpensesByCheckId = async (checkId: string) => {
+//   const { user: authUser } = await validateRequest()
+//   if (!authUser) redirect('/login')
+
+//   await dbConnect()
+
+//   const expenseDocs = await ExpenseModel.find({ checkId, userId: authUser.id })
+//   const expenses: Array<Expense> = expenseDocs.map((doc) => doc.toJSON())
+
+//   return expenses
+// }

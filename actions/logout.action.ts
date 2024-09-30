@@ -1,23 +1,14 @@
 'use server'
 
-import { lucia } from '@/lib/auth'
-import { validateRequest } from '@/lib/validate-request'
-import { cookies } from 'next/headers'
+import { auth, signOut } from '@/auth.config'
 import { redirect } from 'next/navigation'
 
 export const logout = async () => {
-  const { session } = await validateRequest()
+  const session = await auth()
 
   if (!session) throw new Error('Unauthorized')
 
-  await lucia.invalidateSession(session.id)
+  await signOut({ redirect: false })
 
-  const sessionCookie = lucia.createBlankSessionCookie()
-  cookies().set(
-    sessionCookie.name,
-    sessionCookie.value,
-    sessionCookie.attributes,
-  )
-
-  redirect('/login')
+  redirect('/')
 }

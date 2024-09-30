@@ -1,17 +1,24 @@
 'use server'
 
-import { validateRequest } from '@/lib/validate-request'
-import ExpenseModel from '@/models/Expense'
+import { auth } from '@/auth.config'
+import { db } from '@/drizzle'
+import { expenses } from '@/drizzle/schema'
 import { CreateExpenseSchema } from '@/validators/create-expense.validator'
 import { revalidatePath } from 'next/cache'
-import * as v from 'valibot'
+import { parse } from 'valibot'
 
 export const createExpense = async (values: unknown) => {
-  const { user } = await validateRequest()
-  if (!user) throw new Error('Unauthorized')
+  const session = await auth()
+  if (!session?.user?.userId) {
+    throw new Error('Unauthorized')
+  }
 
-  const parsedValues = v.parse(CreateExpenseSchema, values)
+  const parsedValues = parse(CreateExpenseSchema, values)
 
-  await ExpenseModel.create({ ...parsedValues, userId: user.id })
+  await db.insert(expenses).values({
+    ...parsedValues,
+    userId: session.user.userId,
+  })
+
   revalidatePath('/')
 }

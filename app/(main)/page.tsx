@@ -1,36 +1,50 @@
+import { auth } from '@/auth.config'
 import { Brand } from '@/components/brand'
 import CreateExpenseForm from '@/components/create-expense-form'
 import { DepositCheckButton } from '@/components/deposit-check-form'
 import ExpenseList from '@/components/expense-list'
 import { TimeSelector } from '@/components/time-selector'
 import { Button } from '@/components/ui/button'
+import { type SelectExpense } from '@/drizzle/schema'
 import { cn, formatMoney } from '@/lib/utils'
-import { validateRequest } from '@/lib/validate-request'
-import { calcExpenseBalance, findExpenses } from '@/queries/expenses.queries'
+import { findAllExpenses, getExpenseBalance } from '@/queries/expenses.queries'
+import exp from 'constants'
+import { redirect } from 'next/navigation'
 
 type HomePageProps = {
   searchParams: { t?: 'day' | 'week' | 'month' }
 }
 
 const HomePage = async ({ searchParams }: HomePageProps) => {
+  const session = await auth()
+  if (!session?.user) redirect('/login')
+
   const time = searchParams?.t ?? 'week'
 
-  const { user: authUser } = await validateRequest()
+  const expenses = await findAllExpenses(session.user.userId, { time })
 
   return (
     <main>
       <div className='flex flex-col gap-y-4 py-16'>
         <Brand />
-        {!!authUser ? <SignedIn time={time} /> : <SignedOut />}
+        {!!session ? (
+          <SignedIn time={time} expenses={expenses} />
+        ) : (
+          <SignedOut />
+        )}
       </div>
     </main>
   )
 }
 
-const SignedIn = async ({ time }: { time: 'day' | 'week' | 'month' }) => {
-  const expenses = await findExpenses({ time })
-  const total = await calcExpenseBalance()
-
+const SignedIn = async ({
+  time,
+  expenses,
+}: {
+  time: 'day' | 'week' | 'month'
+  expenses: Array<SelectExpense>
+}) => {
+  const total = await getExpenseBalance()
   const slicedExpenses = expenses.slice(0, 8)
 
   return (
@@ -46,7 +60,7 @@ const SignedIn = async ({ time }: { time: 'day' | 'week' | 'month' }) => {
 
       <CreateExpenseForm />
 
-      <DepositCheckButton />
+      {/* <DepositCheckButton /> */}
 
       <TimeSelector time={time} />
 

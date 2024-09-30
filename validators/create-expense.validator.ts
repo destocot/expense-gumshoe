@@ -7,12 +7,12 @@ export const CreateExpenseSchema = v.object({
       v.transform((i) => Number(i)),
       v.number(),
       v.minValue(0.01),
-      v.transform((i) => i.toFixed(2)),
+      v.transform((i) => Number(i.toFixed(2))),
     ),
     v.pipe(
       v.number(),
       v.minValue(0.01),
-      v.transform((i) => i.toFixed(2)),
+      v.transform((i) => Number(i.toFixed(2))),
     ),
   ]),
   type: v.picklist(
@@ -26,3 +26,4 @@ export const CreateExpenseSchema = v.object({
 })
 
 export type CreateExpenseInput = v.InferInput<typeof CreateExpenseSchema>
+export type CreateExpenseOutput = v.InferOutput<typeof CreateExpenseSchema>

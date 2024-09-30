@@ -1,20 +1,20 @@
 import { BrandWithHomeLink } from '@/components/brand'
-import { validateRequest } from '@/lib/validate-request'
 import { redirect } from 'next/navigation'
-import { ExpenseBarChart } from './_components/expense-bar-chart'
-import { findExpenses } from '@/queries/expenses.queries'
+// import { ExpenseBarChart } from './_components/expense-bar-chart'
 import { formatMoney } from '@/lib/utils'
-import UserModel from '@/models/User'
+// import UserModel from '@/models/User'
 import { SettingsButton } from './_components/settings-button'
-import { CheckCard } from '@/components/check-card'
-import { findChecks } from '@/queries/check.queries'
+// import { CheckCard } from '@/components/check-card'
+// import { findChecks } from '@/queries/check.queries'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { auth } from '@/auth.config'
+import { findAllExpenses } from '@/queries/expenses.queries'
 
 export default async function DashboardPage() {
-  const { user: authUser } = await validateRequest()
-  if (!authUser) redirect('/login')
+  const session = await auth()
+  if (!session?.user) redirect('/login')
 
-  const expenses = await findExpenses()
+  const expenses = await findAllExpenses(session.user.userId, {})
 
   const totals = expenses.reduce(
     (acc, expense) => {
@@ -27,9 +27,9 @@ export default async function DashboardPage() {
     { income: 0, savings: 0, other: 0, expenses: 0 },
   )
 
-  const checks = await findChecks()
+  // const checks = await findChecks()
 
-  const user = await UserModel.findById(authUser.id)
+  // const user = await UserModel.findById(authUser.id)
   return (
     <main>
       <div className='flex flex-col gap-y-6 py-16'>
@@ -38,7 +38,7 @@ export default async function DashboardPage() {
             <SettingsButton />
           </BrandWithHomeLink>
         </div>
-        <h2 className='text-2xl font-bold'>{authUser.username}'s Dashboard</h2>
+        {/* <h2 className='text-2xl font-bold'>{authUser.username}'s Dashboard</h2> */}
         <Card>
           <CardContent className='grid pt-6 sm:grid-cols-2'>
             <div className='flex gap-x-2'>
@@ -69,19 +69,19 @@ export default async function DashboardPage() {
             <div className='flex flex-col items-center rounded bg-primary/10'>
               <span>Income</span>
               <span className='text-xl tabular-nums'>
-                {user.checkDepositBreakdown.income}%
+                {/* {user.checkDepositBreakdown.income}% */}
               </span>
             </div>
             <div className='flex flex-col items-center rounded bg-primary/10'>
               <span>Savings</span>
               <span className='text-xl tabular-nums'>
-                {user.checkDepositBreakdown.savings}%
+                {/* {user.checkDepositBreakdown.savings}% */}
               </span>
             </div>
             <div className='flex flex-col items-center rounded bg-primary/10'>
               <span>Other</span>
               <span className='text-xl tabular-nums'>
-                {user.checkDepositBreakdown.other}%
+                {/* {user.checkDepositBreakdown.other}% */}
               </span>
             </div>
           </CardContent>
@@ -90,15 +90,15 @@ export default async function DashboardPage() {
         <h2 className='text-2xl font-bold tracking-tight'>Checks</h2>
 
         <ul className='flex flex-col gap-y-2'>
-          {checks.map((check) => (
+          {/* {checks.map((check) => (
             <li key={check._id}>
               <CheckCard check={check} />
             </li>
-          ))}
+          ))} */}
         </ul>
 
         <div className='rounded border'>
-          <ExpenseBarChart expenses={expenses} />
+          {/* <ExpenseBarChart expenses={expenses} /> */}
         </div>
       </div>
     </main>

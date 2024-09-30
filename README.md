@@ -32,4 +32,11 @@
 
 ### V1.5
 
-- seperate time by day, month, or year
+- separate time by day, month, or year
+- change from MongoDB to sqlite
+- change from mongoose to drizzle
+- change lucia-auth to auth.js
+
+### V1.6
+
+- refactor home page

@@ -1,25 +1,28 @@
-import { validateRequest } from '@/lib/validate-request'
 import { LogoutButton } from './logout-button'
 import Link from 'next/link'
 import { ModeToggle } from './mode-toggle'
 import { buttonVariants } from './ui/button'
+import { auth } from '@/auth.config'
 
 export const Header = async () => {
-  const { user } = await validateRequest()
-  // tsret
+  const session = await auth()
 
   return (
     <header className='bg-primary'>
       <nav className='container max-w-lg'>
         <div className='h-6 bg-primary px-2 text-right text-primary-foreground'>
-          {user ? <SignedIn username={user.username} /> : <SignedOut />}
+          {!!session?.user ? (
+            <SignedIn username={session.user.name} />
+          ) : (
+            <SignedOut />
+          )}
         </div>
       </nav>
     </header>
   )
 }
 
-type SignedInProps = { username: string }
+type SignedInProps = { username: string | null | undefined }
 
 const SignedIn = ({ username }: SignedInProps) => {
   return (

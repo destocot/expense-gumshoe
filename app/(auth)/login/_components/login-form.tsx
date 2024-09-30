@@ -4,7 +4,7 @@ import { valibotResolver } from '@hookform/resolvers/valibot'
 import { useForm } from 'react-hook-form'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { login } from '../_actions/login.action'
+import { login } from '@/actions/login.action'
 import { type LoginInput, LoginSchema } from '@/validators/login.validator'
 import {
   Form,

@@ -1,23 +1,22 @@
 'use client'
 
-import { cn, formatMoney } from '@/lib/utils'
-import type { Expense } from '@/models/Expense'
+import { formatMoney } from '@/lib/utils'
 import {
   CuboidIcon,
   InfoIcon,
   MinusCircleIcon,
   PiggyBankIcon,
   PlusCircleIcon,
-  Trash2Icon,
 } from 'lucide-react'
 import { DeleteExpenseButton } from '@/components/delete-expense-button'
 import { UpdateExpenseButton } from './update-expense-button'
-import { Button, buttonVariants } from './ui/button'
+import { buttonVariants } from './ui/button'
 import Link from 'next/link'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { DeleteCheckButton } from './delete-check-button'
+import { SelectExpense } from '@/drizzle/schema'
 
-type ExpenseItemProps = { expense: Expense }
+type ExpenseItemProps = { expense: SelectExpense }
 
 export const ExpenseItem = ({ expense }: ExpenseItemProps) => {
   return (
@@ -33,9 +32,9 @@ export const ExpenseItem = ({ expense }: ExpenseItemProps) => {
           <span className='tabular-nums'>{formatMoney(expense.amount)}</span>
         </div>
         <div className='text-xs opacity-50 group-hover:hidden'>
-          {new Date(expense.createdAt).toLocaleDateString()}
+          {new Date(expense.createdAt!).toLocaleDateString()}
         </div>
-        {!!expense.checkId ? (
+        {/* {!!expense.checkId ? (
           <div className='absolute bottom-2 right-2 hidden gap-x-1.5 group-hover:flex'>
             <CheckLink checkId={expense.checkId} />
             <DeleteCheckButton checkId={expense.checkId} />
@@ -45,7 +44,7 @@ export const ExpenseItem = ({ expense }: ExpenseItemProps) => {
             <UpdateExpenseButton expense={expense} />
             <DeleteExpenseButton expenseId={expense._id} />
           </div>
-        )}
+        )} */}
       </CardContent>
     </Card>
   )
@@ -62,7 +61,7 @@ const CheckLink = ({ checkId }: { checkId: string }) => {
   )
 }
 
-const ExpenseIcon = ({ type }: { type: Expense['type'] }) => {
+const ExpenseIcon = ({ type }: { type: SelectExpense['type'] }) => {
   switch (type) {
     case 'income':
       return <PlusCircleIcon size={16} className='stroke-success' />
