@@ -40,3 +40,10 @@
 ### V1.6
 
 - refactor home page
+- carousel for checks
+- allow expenses to be separated from checks
+- allow expenses to be any savings or other type
+
+### V1.7
+
+- added loaders to all form submit button
