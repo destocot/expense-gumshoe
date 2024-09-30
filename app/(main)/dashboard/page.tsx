@@ -130,17 +130,37 @@ export default async function DashboardPage() {
 
         <h2 className='text-2xl font-bold tracking-tight'>Checks</h2>
 
-        <Carousel orientation='vertical'>
-          <CarouselContent className='-mt-1 h-[200px]'>
-            {checks.map((check) => (
-              <CarouselItem key={check.checkId}>
-                <CheckCard check={check} />
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <CarouselPrevious />
-          <CarouselNext />
-        </Carousel>
+        {checks.length > 0 ? (
+          <Carousel orientation='vertical'>
+            <CarouselContent className='-mt-1 h-[200px]'>
+              {checks.map((check) => (
+                <CarouselItem key={check.checkId}>
+                  <CheckCard check={check} />
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious />
+            <CarouselNext />
+          </Carousel>
+        ) : (
+          <Card>
+            <CardHeader>
+              <CardTitle className='text-center'>You Have No Checks</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className='text-center'>
+                You have no checks yet. Click the button below to add your first
+                expense.
+              </p>
+              <Button size='sm' className='mt-4 w-full' asChild>
+                <Link href='/'>
+                  Home
+                  <HomeIcon className='ml-2' size={20} />
+                </Link>
+              </Button>
+            </CardContent>
+          </Card>
+        )}
 
         <div className='borderm mt-4 rounded'>
           <ExpenseBarChart expenses={expenses} />
