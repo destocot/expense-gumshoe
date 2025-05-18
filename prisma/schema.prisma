@@ -46,8 +46,21 @@ model User {
   sessions Session[]
   accounts Account[]
   expenses Expense[]
+  profile  Profile?
 
   @@map("users")
+}
+
+model Profile {
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  checkBreakdown Json @map("check_breakdown")
+
+  id   Int  @id
+  user User @relation(fields: [id], references: [id], onDelete: Cascade)
+
+  @@map("profiles")
 }
 
 model Session {

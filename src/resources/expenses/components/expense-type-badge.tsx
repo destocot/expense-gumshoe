@@ -4,10 +4,9 @@ import type { ExpenseType } from '@/generated/prisma'
 
 interface ExpenseTypeBadgeProps {
   type: ExpenseType
-  clip?: boolean
 }
 
-export const ExpenseTypeBadge = ({ type, clip }: ExpenseTypeBadgeProps) => {
+export const ExpenseTypeBadge = ({ type }: ExpenseTypeBadgeProps) => {
   return (
     <Badge
       className={cn('rounded-full', {
@@ -17,7 +16,7 @@ export const ExpenseTypeBadge = ({ type, clip }: ExpenseTypeBadgeProps) => {
         'bg-yellow-500 hover:bg-yellow-500': type === 'OTHER',
       })}
     >
-      <span className='w-14 text-center'>{clip ? type.substring(0, 3) : type}</span>
+      <span className='w-14 text-center'>{type}</span>
     </Badge>
   )
 }

@@ -1,7 +1,7 @@
+import 'server-only'
 import { Prisma } from '@/generated/prisma'
 import { prisma } from '@/lib/prisma'
 import { authGuard } from '@/lib/server-utils'
-import 'server-only'
 
 export async function findOneExpense(where: Prisma.ExpenseWhereUniqueInput) {
   const loggedInUser = await authGuard()
@@ -11,4 +11,18 @@ export async function findOneExpense(where: Prisma.ExpenseWhereUniqueInput) {
   })
 
   return { data: expense }
+}
+
+export async function findAllExpenses(opts: Prisma.ExpenseFindManyArgs = {}) {
+  const loggedInUser = await authGuard()
+
+  const { where, orderBy, ...rest } = opts
+
+  const expenses = await prisma.expense.findMany({
+    where: { userId: +loggedInUser.id, ...where },
+    orderBy: { createdAt: 'desc', ...orderBy },
+    ...rest,
+  })
+
+  return { data: expenses }
 }
