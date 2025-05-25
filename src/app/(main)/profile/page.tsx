@@ -1,12 +1,11 @@
 import { Badge } from '@ui/badge'
-import { Button } from '@ui/button'
 import { Card, CardAction, CardContent, CardFooter, CardHeader, CardTitle } from '@ui/card'
 import { formatCurrency } from '@/lib/utils'
 import { LogoutButton } from '@auth/components/logout-button'
 import { ExpenseTypeBadge } from '@expenses/components/expense-type-badge'
 import { findAllExpenses } from '@expenses/queries'
 import { findOneProfile } from '@profiles/queries'
-import { PencilIcon } from 'lucide-react'
+import { EditCheckBreakdownDialog } from '@/resources/profiles/components/edit-check-breakdown-dialog'
 
 export default async function Page() {
   const profile = await findOneProfile()
@@ -76,10 +75,7 @@ export default async function Page() {
         <CardHeader>
           <CardTitle>Check Breakdown</CardTitle>
           <CardAction>
-            <Button variant='outline' size='sm'>
-              <PencilIcon />
-              Edit
-            </Button>
+            <EditCheckBreakdownDialog defaultValues={profile.checkBreakdown} />
           </CardAction>
         </CardHeader>
 
