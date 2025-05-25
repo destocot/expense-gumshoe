@@ -8,7 +8,7 @@ export async function deleteExpenseAction(expenseId: number) {
   const loggedInUser = await authGuard()
 
   await prisma.expense.delete({
-    where: { id: expenseId, userId: +loggedInUser.id },
+    where: { id: expenseId, profileId: +loggedInUser.id },
   })
 
   revalidatePath('/')

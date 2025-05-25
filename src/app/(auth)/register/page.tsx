@@ -1,12 +1,5 @@
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import { RegisterForm } from '@/resources/auth/components/register-form'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@ui/card'
+import { RegisterForm } from '@auth/components/register-form'
 import Link from 'next/link'
 
 export default async function Page() {

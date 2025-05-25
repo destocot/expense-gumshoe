@@ -1,7 +1,7 @@
 import { Footer } from '@/components/footer'
 import Link from 'next/link'
 import { ThemeToggler } from '@/components/theme-toggler'
-import { Button } from '@/components/ui/button'
+import { Button } from '@ui/button'
 import { UserIcon } from 'lucide-react'
 
 export default function MainLayout({

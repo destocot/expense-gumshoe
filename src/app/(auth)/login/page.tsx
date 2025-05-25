@@ -1,12 +1,5 @@
-import { LoginForm } from '@/resources/auth/components/login-form'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { LoginForm } from '@auth/components/login-form'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@ui/card'
 import Link from 'next/link'
 
 export default function Page() {

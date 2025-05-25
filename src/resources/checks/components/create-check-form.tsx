@@ -2,31 +2,29 @@
 
 import { useForm } from 'react-hook-form'
 import { valibotResolver } from '@hookform/resolvers/valibot'
-import { cn, EXPENSE_TYPES } from '@/lib/utils'
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@ui/form'
 import { Input } from '@ui/input'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@ui/select'
-import { Textarea } from '@ui/textarea'
 import { Button } from '@ui/button'
 import { DollarSignIcon, Loader2Icon } from 'lucide-react'
-import { type CreateExpenseOutput, CreateExpenseSchema } from '@expenses/validators'
-import { createExpenseAction } from '@expenses/actions/create-expense.action'
+import { type CreateCheckOutput, CreateCheckSchema } from '@checks/validators'
 import { useRouter } from 'next/navigation'
+import { Textarea } from '@ui/textarea'
+import { createCheckAction } from '@checks/actions/create-check.action'
 
-interface CreateExpenseFormProps {
+interface CreateCheckFormProps {
   onSuccess?: () => void
 }
 
-export const CreateExpenseForm = ({ onSuccess }: CreateExpenseFormProps) => {
+export const CreateCheckForm = ({ onSuccess }: CreateCheckFormProps) => {
   const router = useRouter()
 
-  const form = useForm<CreateExpenseOutput>({
-    resolver: valibotResolver(CreateExpenseSchema),
-    defaultValues: { amount: '', type: EXPENSE_TYPES[0], description: '' },
+  const form = useForm<CreateCheckOutput>({
+    resolver: valibotResolver(CreateCheckSchema),
+    defaultValues: { amount: '', description: '' },
   })
 
-  async function submit(values: CreateExpenseOutput) {
-    const { error } = await createExpenseAction(values)
+  async function submit(values: CreateCheckOutput) {
+    const { error } = await createCheckAction(values)
 
     if (error) return
 
@@ -76,45 +74,6 @@ export const CreateExpenseForm = ({ onSuccess }: CreateExpenseFormProps) => {
 
         <FormField
           control={form.control}
-          name='type'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Type</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <FormControl>
-                  <div className='relative'>
-                    <SelectTrigger className='w-full'>
-                      <SelectValue />
-                      <div
-                        className={cn(
-                          'absolute top-1/2 right-12 size-4 -translate-y-1/2 rounded-full',
-                          {
-                            'bg-red-500': field.value === 'EXPENSE',
-                            'bg-green-500': field.value === 'INCOME',
-                            'bg-blue-500': field.value === 'SAVINGS',
-                            'bg-yellow-500': field.value === 'OTHER',
-                          },
-                        )}
-                      />
-                    </SelectTrigger>
-                  </div>
-                </FormControl>
-
-                <SelectContent>
-                  {EXPENSE_TYPES.map((type) => (
-                    <SelectItem key={type} value={type}>
-                      {type}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
           name='description'
           render={({ field }) => (
             <FormItem>
@@ -128,11 +87,7 @@ export const CreateExpenseForm = ({ onSuccess }: CreateExpenseFormProps) => {
         />
 
         <Button type='submit' disabled={form.formState.isSubmitting} className='w-full'>
-          {form.formState.isSubmitting ? (
-            <Loader2Icon className='animate-spin' />
-          ) : (
-            'Create Expense'
-          )}
+          {form.formState.isSubmitting ? <Loader2Icon className='animate-spin' /> : 'Deposit Check'}
         </Button>
       </form>
     </Form>

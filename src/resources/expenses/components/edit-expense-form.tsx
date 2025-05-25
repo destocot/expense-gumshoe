@@ -3,24 +3,11 @@
 import { useForm } from 'react-hook-form'
 import { valibotResolver } from '@hookform/resolvers/valibot'
 import { cn, EXPENSE_TYPES, formatCurrency } from '@/lib/utils'
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
-import { Textarea } from '@/components/ui/textarea'
-import { Button } from '@/components/ui/button'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@ui/form'
+import { Input } from '@ui/input'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@ui/select'
+import { Textarea } from '@ui/textarea'
+import { Button } from '@ui/button'
 import { DollarSignIcon, Loader2Icon } from 'lucide-react'
 import { type EditExpenseOutput, EditExpenseSchema } from '@expenses/validators'
 import type { Expense } from '@/generated/prisma'

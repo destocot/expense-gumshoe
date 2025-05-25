@@ -18,7 +18,7 @@ export async function editExpenseAction(values: EditExpenseOutput) {
   const { amount, type, description, id } = parsedValues.output
 
   await prisma.expense.update({
-    where: { id, userId: +loggedInUser.id },
+    where: { id, profileId: +loggedInUser.id },
     data: {
       ...(amount ? { amount: parseFloat(amount) * 100 } : {}),
       ...(type ? { type } : {}),

@@ -1,17 +1,23 @@
 import { Card, CardContent } from '@ui/card'
 import { ScrollArea } from '@ui/scroll-area'
-import { prisma } from '@/lib/prisma'
 import { ExpenseList } from '@expenses/components/expense-list'
 import { PiggyBankIcon, TrendingDownIcon } from 'lucide-react'
+import { findAllExpenses } from '@expenses/queries'
 
-export const ExpenseListServer = async () => {
-  const expenses = await prisma.expense.findMany({
-    orderBy: { createdAt: 'desc' },
+interface ExpenseListServerProps {
+  userId: number
+}
+
+export const ExpenseListServer = async ({ userId }: ExpenseListServerProps) => {
+  const { data: expenses } = await findAllExpenses({
+    where: {
+      profileId: userId,
+    },
   })
 
   if (expenses.length === 0) {
     return (
-      <Card className='mx-auto w-full border-2 border-dashed sm:max-w-sm'>
+      <Card className='w-full border-2 border-dashed'>
         <CardContent className='flex flex-col items-center gap-6'>
           <div className='relative'>
             <div className='bg-primary/10 rounded-full p-4'>

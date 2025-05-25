@@ -15,16 +15,19 @@ export async function createExpenseAction(values: CreateExpenseOutput) {
     return { error: flatten<typeof CreateExpenseSchema>(parsedValues.issues) }
   }
 
-  const { amount, type, description } = parsedValues.output
+  const { amount, type, description, checkId } = parsedValues.output
 
   await prisma.expense.create({
     data: {
       amount: parseFloat(amount) * 100,
       type,
       ...(description ? { description } : {}),
-      userId: +loggedInUser.id,
+      profileId: +loggedInUser.id,
+      ...(checkId ? { checkId } : {}),
     },
   })
 
   revalidatePath('/')
+
+  return { error: null }
 }

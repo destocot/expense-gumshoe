@@ -16,6 +16,7 @@ export const CreateExpenseSchema = v.object({
       v.transform((v) => (v.length > 0 ? v : undefined)),
     ),
   ),
+  checkId: v.optional(v.pipe(v.number(), v.integer(), v.minValue(0))),
 })
 
 // TODO: update at least one field

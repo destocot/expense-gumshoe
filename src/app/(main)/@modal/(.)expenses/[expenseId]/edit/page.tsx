@@ -1,6 +1,6 @@
 import { authGuard } from '@/lib/server-utils'
 import ClientPage from './client-page'
-import { findOneExpense } from '@/resources/expenses/queries'
+import { findOneExpense } from '@expenses/queries'
 import { notFound } from 'next/navigation'
 
 interface PageProps {

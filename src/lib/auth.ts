@@ -2,7 +2,7 @@ import { betterAuth } from 'better-auth'
 import { prismaAdapter } from 'better-auth/adapters/prisma'
 import { prisma } from '@/lib/prisma'
 import { username } from 'better-auth/plugins'
-import { createProfile } from '@/resources/profiles/queries'
+import { createProfile } from '@profiles/queries'
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {

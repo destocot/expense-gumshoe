@@ -1,14 +1,14 @@
 'use client'
 
-import { Label } from '@/components/ui/label'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
+import { Label } from '@ui/label'
+import { Input } from '@ui/input'
+import { Button } from '@ui/button'
 import { signIn } from '@/lib/auth-client'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { Loader2Icon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { EmailSchema, LoginSchema, type LoginSchemaErrors } from '@/resources/auth/validators'
+import { EmailSchema, LoginSchema, type LoginSchemaErrors } from '@auth/validators'
 import { flatten, safeParse } from 'valibot'
 import { FormError } from '@/components/form-error'
 

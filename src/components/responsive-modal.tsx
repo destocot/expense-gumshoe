@@ -2,8 +2,8 @@
 
 import { useMedia } from 'react-use'
 import defaultTheme from 'tailwindcss/defaultTheme'
-import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog'
-import { Drawer, DrawerContent, DrawerDescription, DrawerTitle } from '@/components/ui/drawer'
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@ui/dialog'
+import { Drawer, DrawerContent, DrawerDescription, DrawerTitle } from '@ui/drawer'
 
 interface ResponsiveModalProps {
   children: React.ReactNode
@@ -17,7 +17,7 @@ export const ResponsiveModal = ({ children, open, onOpenChange }: ResponsiveModa
   if (isDesktop) {
     return (
       <Dialog open={open} onOpenChange={onOpenChange}>
-        <DialogContent className='hide-scrollbar w-full overflow-y-auto border-none p-0 sm:max-w-lg'>
+        <DialogContent className='hide-scrollbar w-full overflow-y-auto border-none p-0 sm:max-w-sm'>
           <DialogTitle className='sr-only'>Modal Title</DialogTitle>
           <DialogDescription className='sr-only'>Modal Description</DialogDescription>
           {children}

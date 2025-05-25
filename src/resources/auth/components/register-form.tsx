@@ -1,15 +1,15 @@
 'use client'
 
-import { Label } from '@/components/ui/label'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
+import { Label } from '@ui/label'
+import { Input } from '@ui/input'
+import { Button } from '@ui/button'
 import { signUp } from '@/lib/auth-client'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { Loader2Icon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { flatten, safeParse } from 'valibot'
-import { RegisterSchema, type RegisterSchemaErrors } from '@/resources/auth/validators'
+import { RegisterSchema, type RegisterSchemaErrors } from '@auth/validators'
 import { FormError } from '@/components/form-error'
 
 export const RegisterForm = () => {

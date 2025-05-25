@@ -1,6 +1,6 @@
 'use client'
 
-import { Button } from '@/components/ui/button'
+import { Button } from '@ui/button'
 import { PencilIcon, TrashIcon } from 'lucide-react'
 import Link from 'next/link'
 import { useTransition } from 'react'

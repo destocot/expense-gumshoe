@@ -2,7 +2,7 @@
 
 import { ResponsiveModal } from '@/components/responsive-modal'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@ui/card'
-import { CreateExpenseForm } from '@expenses/components/create-expense-form'
+import { CreateCheckForm } from '@checks/components/create-check-form'
 import { useRouter } from 'next/navigation'
 
 export default function ClientPage() {
@@ -13,12 +13,12 @@ export default function ClientPage() {
     <ResponsiveModal open={true} onOpenChange={handleOpenChange}>
       <Card className='sm:bg-card border-0 bg-transparent shadow-none'>
         <CardHeader>
-          <CardTitle>Create New Expense</CardTitle>
-          <CardDescription>Fill out the details below to log a new expense.</CardDescription>
+          <CardTitle>Deposit Check</CardTitle>
+          <CardDescription>Fill out the details below to deposit check.</CardDescription>
         </CardHeader>
 
         <CardContent>
-          <CreateExpenseForm onSuccess={handleOpenChange} />
+          <CreateCheckForm onSuccess={handleOpenChange} />
         </CardContent>
       </Card>
     </ResponsiveModal>

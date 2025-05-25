@@ -11,7 +11,7 @@ import { PencilIcon } from 'lucide-react'
 export default async function Page() {
   const profile = await findOneProfile()
 
-  const { data: expenses } = await findAllExpenses({ where: { userId: profile.id } })
+  const { data: expenses } = await findAllExpenses({ where: { profileId: profile.id } })
 
   const aggregations = (expenses ?? []).reduce(
     (accu, { type, amount }) => {

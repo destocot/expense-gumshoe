@@ -25,10 +25,27 @@ model Expense {
   description String?
   type        ExpenseType
 
-  userId Int  @map("user_id")
-  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  checkId Int?   @map("check_id")
+  check   Check? @relation(fields: [checkId], references: [id], onDelete: Cascade)
+
+  profileId Int     @map("profile_id")
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
 
   @@map("expenses")
+}
+
+model Check {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  amount      Int
+  description String?
+
+  expenses Expense[]
+
+  profileId Int     @map("profile_id")
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
 }
 
 model User {
@@ -45,7 +62,6 @@ model User {
 
   sessions Session[]
   accounts Account[]
-  expenses Expense[]
   profile  Profile?
 
   @@map("users")
@@ -55,7 +71,9 @@ model Profile {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  checkBreakdown Json @map("check_breakdown")
+  checkBreakdown Json      @map("check_breakdown")
+  expenses       Expense[]
+  checks         Check[]
 
   id   Int  @id
   user User @relation(fields: [id], references: [id], onDelete: Cascade)

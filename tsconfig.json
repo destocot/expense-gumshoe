@@ -21,6 +21,7 @@
     "paths": {
       "@/*": ["./src/*"],
       "@expenses/*": ["./src/resources/expenses/*"],
+      "@checks/*": ["./src/resources/checks/*"],
       "@auth/*": ["./src/resources/auth/*"],
       "@profiles/*": ["./src/resources/profiles/*"],
       "@ui/*": ["./src/components/ui/*"]

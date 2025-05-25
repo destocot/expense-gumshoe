@@ -1,6 +1,6 @@
 'use client'
 
-import { Button } from '@/components/ui/button'
+import { Button } from '@ui/button'
 import { signOut } from '@/lib/auth-client'
 import { Loader2Icon } from 'lucide-react'
 import { useRouter } from 'next/navigation'
