@@ -5,10 +5,17 @@ import { LogoutButton } from '@auth/components/logout-button'
 import { ExpenseTypeBadge } from '@expenses/components/expense-type-badge'
 import { findAllExpenses } from '@expenses/queries'
 import { findOneProfile } from '@profiles/queries'
-import { EditCheckBreakdownDialog } from '@/resources/profiles/components/edit-check-breakdown-dialog'
+import { EditCheckBreakdownDialog } from '@profiles/components/edit-check-breakdown-dialog'
+import { authGuard } from '@/lib/server-utils'
+import { CheckCarousel } from '@checks/components/check-carousel'
 
 export default async function Page() {
-  const profile = await findOneProfile()
+  const loggedInUser = await authGuard()
+
+  const profile = await findOneProfile({
+    where: { id: +loggedInUser.id },
+    include: { checks: true },
+  })
 
   const { data: expenses } = await findAllExpenses({ where: { profileId: profile.id } })
 
@@ -92,6 +99,16 @@ export default async function Page() {
             <Badge variant='outline'>Other</Badge>
             <span className='text-sm'>{profile.checkBreakdown.other}</span>
           </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Recent Checks</CardTitle>
+        </CardHeader>
+
+        <CardContent>
+          <CheckCarousel checks={profile.checks} />
         </CardContent>
       </Card>
     </div>

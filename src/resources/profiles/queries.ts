@@ -2,29 +2,22 @@ import 'server-only'
 import { Prisma } from '@/generated/prisma'
 import { prisma } from '@/lib/prisma'
 import { authGuard } from '@/lib/server-utils'
-import { Profile } from '@profiles/types'
+import { Profile } from './types'
 
 export async function createProfile(payload: Prisma.ProfileCreateInput) {
   await prisma.profile.create({ data: payload })
 }
 
-export async function findOneProfile(where?: Prisma.ProfileWhereUniqueInput) {
-  const loggedInUser = await authGuard()
+export async function findOneProfile<T extends Prisma.ProfileFindUniqueArgs>(
+  opts: Prisma.SelectSubset<T, Prisma.ProfileFindUniqueArgs>,
+) {
+  await authGuard()
 
-  const profileId = where?.id ? where.id : +loggedInUser.id
+  const profile = await prisma.profile.findUnique(opts)
 
-  let profile = await prisma.profile.findUnique({
-    where: { id: profileId, ...(where ? { where } : {}) },
-  })
+  if (!profile) throw new Error('Profile not found')
 
-  if (!profile) {
-    profile = await prisma.profile.create({
-      data: {
-        id: profileId,
-        checkBreakdown: { income: 0.34, savings: 0.33, other: 0.33 },
-      },
-    })
-  }
+  const { checkBreakdown, ...rest } = profile
 
-  return profile as Profile
+  return { ...rest, checkBreakdown: checkBreakdown as Profile['checkBreakdown'] }
 }

@@ -16,10 +16,9 @@ export async function findOneExpense(where: Prisma.ExpenseWhereUniqueInput) {
 export async function findAllExpenses(opts: Prisma.ExpenseFindManyArgs = {}) {
   await authGuard()
 
-  const { where, orderBy, ...rest } = opts
+  const { orderBy, ...rest } = opts
 
   const expenses = await prisma.expense.findMany({
-    where,
     orderBy: { createdAt: 'desc', ...orderBy },
     ...rest,
   })
